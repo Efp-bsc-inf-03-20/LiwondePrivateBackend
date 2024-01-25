@@ -10,7 +10,7 @@ export class FinancialController {
     
     @Post()
     @ApiOperation({summary:'register patient in finance'})
-    @ApiResponse({ status: 200, description: 'Patient created Successful ' })
+    @ApiResponse({ status: 200, description: 'Patient created Successfully ' })
 
     createFinancialPatient(): string {
       return 'patient created sucessfully';
