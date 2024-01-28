@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Financial } from 'src/Entitys/Financial.Entity';
 import { Repository } from 'typeorm';
+import { UpdateFinanceDto } from './dtos/UpdatedFinance.dto';
+import { createFinanceParams } from './utils/types';
 
 @Injectable()
 export class FinancialService {
@@ -12,9 +14,10 @@ export class FinancialService {
     }
   
   
-    async  createFinancialPatient(/* dtos here */): Promise<void> {
+    async  createFinancialPatient(FinancialDetails:createFinanceParams): Promise<void> {
         const newpatientonreception=this.FinancialRepository.create({
-            //dtos
+            ...FinancialDetails,
+            Date:new Date(),
   
         })
         await this.FinancialRepository.save(newpatientonreception);

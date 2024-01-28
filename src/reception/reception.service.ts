@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reception } from 'src/Entitys/Reception.Entity';
 import { Repository } from 'typeorm';
+import { CreateReceptionDTO } from './DTOs/ReceptionDtos';
+import { UpdateReceptionParams, createReceptionParams } from './Utils/types';
 
 @Injectable()
 export class ReceptionService{
@@ -11,10 +13,20 @@ export class ReceptionService{
       return this.ReceptionRepository.find();
   }
 
+  async findReceptionPatientById(ID: number): Promise<Reception | undefined> {
+    const patient= this.ReceptionRepository.findOne({ where: { ID: ID } });
+    return patient;
+}
 
-  async createReception(/* dtos here */): Promise<void> {
+
+  async createReception(ReceptionDetails:createReceptionParams): Promise<void> {
       const newpatientonreception=this.ReceptionRepository.create({
-          //dtos
+          FirstName:ReceptionDetails.FirstName,
+          LastName:ReceptionDetails.LastName,
+          PhoneNumber:ReceptionDetails.PhoneNumber,
+      
+          PaymentMethod:ReceptionDetails.PaymentMethod,
+          Date: new Date(),
 
       })
       await this.ReceptionRepository.save(newpatientonreception);
@@ -32,12 +44,32 @@ export class ReceptionService{
       return `This is the number of patients registered today: ${count}`;
     }
 
-    async  UpdatePatientById(): Promise<void>{
-      //await this.PhamarcyRepository.update();
+    async UpdateReceptionPatientById(ID: number, UpdateReceDetails: UpdateReceptionParams): Promise<void> {
+      const updateObject: Partial<UpdateReceptionParams> = {};
 
-   }
-   async DeletePatientById(): Promise<void>{
-      //await this.ReceptionRepository.delete();
+      if (UpdateReceDetails.FirstName !== undefined) {
+          updateObject.FirstName = UpdateReceDetails.FirstName;
+      }
+
+      if (UpdateReceDetails.LastName !== undefined) {
+          updateObject.LastName = UpdateReceDetails.LastName;
+      }
+
+      if (UpdateReceDetails.PhoneNumber !== undefined) {
+          updateObject.PhoneNumber = UpdateReceDetails.PhoneNumber;
+      }
+
+      if (UpdateReceDetails.PaymentMethod !== undefined) {
+          updateObject.PaymentMethod = UpdateReceDetails.PaymentMethod;
+      }
+
+      if (Object.keys(updateObject).length > 0) {
+          await this.ReceptionRepository.update(ID, updateObject);
+      }
+  }
+
+   async DeleteReceptionPatientById(ID:number): Promise<void>{
+      await this.ReceptionRepository.delete(ID);
     }
 
      

@@ -1,9 +1,10 @@
 import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
 
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PhamarcyServices } from './phamarcy.service';
 
 @Controller('phamarcy')
+@ApiTags('Phamarcy')
 export class PhamarcyController {
     constructor(private PhamarcyServices: PhamarcyServices) {}
 
@@ -30,7 +31,7 @@ export class PhamarcyController {
     }
 
     @Delete()
-    @ApiOperation({summary:' phamarcy Drug created sucessfully'})
+    @ApiOperation({summary:' phamarcy Drug deletedm sucessfully'})
     @ApiResponse({ status: 200, description: 'phamarcy drug deleted Successful ' })
     DeleteDrugById(){
         return 'Drug deleted sucessfully'

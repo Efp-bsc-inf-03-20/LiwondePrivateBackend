@@ -1,10 +1,12 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
 import { FinancialService } from './financial.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CreateFinanceDTO } from './dtos/financial.dto';
 
-@Controller('financial')
+@Controller('finance')
+@ApiTags('Finance')
 export class FinancialController {
-    constructor(private ReceptionServices: FinancialService) {};
+    constructor(private FinancialServices: FinancialService) {};
     
 
     
@@ -12,7 +14,8 @@ export class FinancialController {
     @ApiOperation({summary:'register patient in finance'})
     @ApiResponse({ status: 200, description: 'Patient created Successful ' })
 
-    createFinancialPatient(): string {
+    createFinancialPatient(@Body() FinanceDTO:CreateFinanceDTO): string {
+      this.FinancialServices.createFinancialPatient(FinanceDTO)
       return 'patient created sucessfully';
     }
   
@@ -20,7 +23,7 @@ export class FinancialController {
     @Get()
     @ApiOperation({summary:'get all financial patient'})
     @ApiResponse({ status: 200, description: 'return all patient  ' })
-    findAllFinancialatients(): string {
+    findAllFinancialpatients(): string {
       return 'find all patients in finance ';
 
     }

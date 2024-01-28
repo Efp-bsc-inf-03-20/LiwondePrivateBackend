@@ -1,8 +1,9 @@
 import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
 import { BackstoreService } from './backstore.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('backstore')
+@ApiTags('backstore')
 export class BackstoreController {
 
     constructor(private BackstoreServices: BackstoreService) {}
