@@ -7,12 +7,12 @@ export class CreateLaborotoryDTO {
     @ApiProperty({ description: 'Last name of the patient' })
     LastName: string;
 
-    @ApiProperty({ description: 'Type of treatment' })
-    Treatment: string;
-
-    @ApiProperty({ description: 'Amount charged' })
-    Amount: number;
-
+   
     @ApiProperty({ description: 'Payment method used' })
     PaymentMethod: string;
+
+    @ApiProperty({ description: 'Payment method used' })
+    TestOrdered: string;
+
+
 }

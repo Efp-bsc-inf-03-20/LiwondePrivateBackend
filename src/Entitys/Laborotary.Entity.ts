@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsString } from "class-validator";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Laboratory{
-    @Column()
+    @PrimaryGeneratedColumn()
     ID:number
 
     @Column({nullable:false})

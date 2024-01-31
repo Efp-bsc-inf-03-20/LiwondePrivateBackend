@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Laboratory } from 'src/Entitys/Laborotary.Entity';
 import { Repository } from 'typeorm';
+import { CreateLaborotoryParams, UpdateLaborotoryParams } from './Utils/types';
 
 @Injectable()
 export class LaboratoryService {
@@ -17,7 +18,7 @@ export class LaboratoryService {
       return patient;
   }
    
-  async  createLaborotoryPatient(LaborotaryDetails:createLaborotoryParams): Promise<void> {
+  async  createLaborotoryPatient(LaborotaryDetails:CreateLaborotoryParams): Promise<void> {
     const newpatientonLaborotory=this.LaboraotyRepository.create({
         ...LaborotaryDetails,
         Date:new Date(),
@@ -25,12 +26,6 @@ export class LaboratoryService {
     })
     await this.LaboraotyRepository.save(newpatientonLaborotory);
 }
-
-
-
-
-
-
 
   async countPatients(): Promise<number> {
     const count = await this.LaboraotyRepository.count();
@@ -46,31 +41,29 @@ export class LaboratoryService {
   async UpdateLaborotoryPatientById(ID: number, UpdatedLaborotoryDetails: UpdateLaborotoryParams): Promise<void> {
     const updateObject: Partial<UpdateLaborotoryParams> = {};
 
-    if (UpdatedfinanceDetails.Firstname !== undefined) {
-        updateObject.Firstname= UpdatedfinanceDetails.Firstname;
+    if (UpdatedLaborotoryDetails.FirstName !== undefined) {
+        updateObject.FirstName= UpdatedLaborotoryDetails.FirstName;
     }
 
-    if (UpdatedfinanceDetails.LastName !== undefined) {
-        updateObject.LastName = UpdatedfinanceDetails.LastName;
+    if (UpdatedLaborotoryDetails.LastName !== undefined) {
+        updateObject.LastName = UpdatedLaborotoryDetails.LastName;
     }
 
-    if (UpdatedfinanceDetails.Treatment !== undefined) {
-        updateObject.Treatment = UpdatedfinanceDetails.Treatment;
+    if (UpdatedLaborotoryDetails.PaymentMethod !== undefined) {
+        updateObject.PaymentMethod = UpdatedLaborotoryDetails.PaymentMethod;
     }
 
-    if (UpdatedfinanceDetails.Amount !== undefined) {
-        updateObject.Amount = UpdatedfinanceDetails.Amount;
+    if (UpdatedLaborotoryDetails.TestOrdered !== undefined) {
+        updateObject.TestOrdered = UpdatedLaborotoryDetails.TestOrdered;
     }
 
-    if (UpdatedfinanceDetails.PaymentMethod !== undefined) {
-        updateObject.PaymentMethod = UpdatedfinanceDetails.PaymentMethod;
-    }
+   
 
     if (Object.keys(updateObject).length > 0) {
-        await this.FinancialRepository.update(id, updateObject);
+        await this.LaboraotyRepository.update(ID, updateObject);
     }
 }
- async DeletePatientById(id:number): Promise<void>{
+ async DeleteLabPatientById(id:number): Promise<void>{
     await this.LaboraotyRepository.delete(id);
   }
 
