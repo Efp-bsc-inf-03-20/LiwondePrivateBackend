@@ -12,6 +12,6 @@ export class UpdateReceptionParams {
     LastName?: string;
     PhoneNumber:string;
     PaymentMethod:string;
-    Date?:string;
+    Date?:Date;
   }
   

@@ -46,7 +46,7 @@ export class OpdController {
     @Delete(':ID')
     @ApiOperation({summary:'opd patient deleted '})
     @ApiResponse({ status: 200, description: 'opd  patient deleted Successfully ' })
-    
+
     DeleteOPDPatientById(@Param('ID',ParseIntPipe)ID:number){
       this.OpdServices.DeleteOPDPatientById(ID);
 

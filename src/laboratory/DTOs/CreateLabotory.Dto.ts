@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class CreateFinanceDTO {
+export class CreateLaborotoryDTO {
     @ApiProperty({ description: 'First name of the patient' })
     FirstName: string;
 
@@ -15,12 +15,4 @@ export class CreateFinanceDTO {
 
     @ApiProperty({ description: 'Payment method used' })
     PaymentMethod: string;
-}
-
-export class DaySummaryDto {
-    @ApiProperty({ description: 'Banking amount for the day' })
-    banking: number;
-
-    @ApiProperty({ description: 'Cash in hand amount for the day' })
-    CashInHand: number;
 }

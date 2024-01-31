@@ -26,7 +26,7 @@ export class ReceptionController {
     @Get()
     @ApiOperation({summary:'get all registered patient'})
     @ApiResponse({ status: 200, description: 'return all patient  ' })
-   async  findAllReceptionpatients() {
+    async  findAllReceptionpatients() {
       const patients=await this.ReceptionServices.findAllReceptionpatients();
        return patients;
 

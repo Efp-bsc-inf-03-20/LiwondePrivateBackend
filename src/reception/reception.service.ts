@@ -19,18 +19,18 @@ export class ReceptionService{
 }
 
 
-  async createReception(ReceptionDetails:createReceptionParams): Promise<void> {
-      const newpatientonreception=this.ReceptionRepository.create({
-          FirstName:ReceptionDetails.FirstName,
-          LastName:ReceptionDetails.LastName,
-          PhoneNumber:ReceptionDetails.PhoneNumber,
-      
-          PaymentMethod:ReceptionDetails.PaymentMethod,
-          Date: new Date(),
+async createReception(ReceptionDetails:createReceptionParams): Promise<void> {
+    const newpatientonreception=this.ReceptionRepository.create({
+        FirstName:ReceptionDetails.FirstName,
+        LastName:ReceptionDetails.LastName,
+        PhoneNumber:ReceptionDetails.PhoneNumber,
+    
+        PaymentMethod:ReceptionDetails.PaymentMethod,
+        Date: new Date(),
 
-      })
-      await this.ReceptionRepository.save(newpatientonreception);
-  }
+    })
+    await this.ReceptionRepository.save(newpatientonreception);
+}
 
 
   async countPatients(): Promise<number> {

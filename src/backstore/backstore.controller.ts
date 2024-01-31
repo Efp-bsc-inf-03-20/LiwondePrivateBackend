@@ -1,6 +1,9 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { BackstoreService } from './backstore.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Backstore } from 'src/Entitys/Backstore.Entity';
+import { CreateBackstoreDTO } from './DTOs/CreateBackstoreDtos';
+import { UpdateBackstoreDto } from './DTOs/UpdateBackstoreDtos';
 
 @Controller('backstore')
 @ApiTags('backstore')
@@ -9,8 +12,10 @@ export class BackstoreController {
     constructor(private BackstoreServices: BackstoreService) {}
     @Post()
     @ApiOperation({summary:'create backstore Drug'})
+
     @ApiResponse({ status: 200, description: 'backstore drug created Successfully ' })
-    createBackStoreDrug(): string {
+    createBackStoreDrug(@Body() BackstoreDTO:CreateBackstoreDTO){
+      this.BackstoreServices.createBackStoreDrug(BackstoreDTO)
       return 'backstore Drug created successfully';
     }
   
@@ -21,15 +26,21 @@ export class BackstoreController {
       return 'find all Backstore Drugs';
 
     }
-
-    @Put()
-    @ApiOperation({summary:'update backstore Drug'})
-    @ApiResponse({ status: 200, description: 'backstore drug updated   Successfully ' })
-    UpdateBackStoreDrugById(){
-        return 'Backstore drug  updated sucessfully'
+    @Get(':ID')
+    @ApiOperation({summary:'get a backstore drug '})
+    @ApiResponse({ status: 200, description: 'return a certain drug in backstore ' })
+    async getbackstoreDrugById(@Param('id') id: number): Promise<Backstore| undefined> {
+      return this.BackstoreServices.getbackstoreDrugById(id);
     }
 
-    @Delete()
+    @Put(':ID')
+    @ApiOperation({summary:'update backstore Drug'})
+    @ApiResponse({ status: 200, description: 'backstore drug updated   Successfully ' })
+
+    
+  
+
+    @Delete(':ID')
     @ApiOperation({summary:'delete  backstore Drug'})
     @ApiResponse({ status: 200, description: 'backstore drug deleted  Successfully ' })
     DeleteBackStoreDrugById(){

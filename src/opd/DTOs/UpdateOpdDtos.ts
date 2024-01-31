@@ -1,12 +1,21 @@
-export class UpdateOpdDto{ 
-    ID:number;
-    FirstName:string;
-    LastName:string;
-    Treatment:string;
-    Amount:number;
-    MedicalScheme:string;
-    
+import { ApiProperty } from "@nestjs/swagger";
 
+export class UpdateOpdDto {
+    @ApiProperty({ description: 'Unique identifier for the OPD record' })
+    ID: number;
 
-  
+    @ApiProperty({ description: 'Updated first name of the patient' })
+    FirstName: string;
+
+    @ApiProperty({ description: 'Updated last name of the patient' })
+    LastName: string;
+
+    @ApiProperty({ description: 'Updated type of treatment for the patient' })
+    Treatment: string;
+
+    @ApiProperty({ description: 'Updated amount related to the OPD record' })
+    Amount: number;
+
+    @ApiProperty({ description: 'Updated medical scheme used for the treatment' })
+    MedicalScheme: string;
 }

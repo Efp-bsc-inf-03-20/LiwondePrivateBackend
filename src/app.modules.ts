@@ -16,6 +16,16 @@ import { Pharmacy } from './Entitys/Phamarcy.Entity';
 import { PhamarcyServices } from './phamarcy/phamarcy.service';
 
 import { Backstore } from './Entitys/Backstore.Entity';
+import { FinancialController } from './financial/financial.controller';
+import { FinancialService } from './financial/financial.service';
+import { XRayController } from './x-ray/x-ray.controller';
+import { XRayService } from './x-ray/x-ray.service';
+import { DentalService } from './dental/dental.service';
+import { DentalController } from './dental/dental.controller';
+import { LaboratoryService } from './laboratory/laboratory.service';
+import { LaboratoryController } from './laboratory/laboratory.controller';
+import { Xray } from './Entitys/Xray.Entity';
+import { Laboratory } from './Entitys/Laborotary.Entity';
 
 @Module({
   imports: [
@@ -26,30 +36,40 @@ import { Backstore } from './Entitys/Backstore.Entity';
       username: 'postgres',
       password: '1234',
       database: 'liwondeprivatehospital',
-      entities: [Reception, OPD, Pharmacy, Financial, DaySummary],
+      entities: [Reception, OPD, Pharmacy, Financial, DaySummary,Backstore,Xray,Laboratory],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Backstore,Pharmacy,Reception,OPD,Financial,DaySummary]), 
+    TypeOrmModule.forFeature([Backstore,Pharmacy,Reception,OPD,Financial,DaySummary,Xray,Laboratory]), 
   ],
   providers: [
     BackstoreService,
     AppService,
     PhamarcyServices,
+    FinancialService,
     ReceptionService,
+    LaboratoryService,
+    XRayService,
+    DentalService,
     OpdService,
     Backstore,
     Pharmacy,
     Reception ,
     OPD,
     Financial,
-    DaySummary
+    DaySummary,
+    Xray,
+    Laboratory
   ],
   controllers: [
     AppController,
+    FinancialController,
     BackstoreController,
+    LaboratoryController,
     PhamarcyController,
     ReceptionController,
     OpdController,
+    XRayController,
+    DentalController
   ],
 })
 export class AppModule {}

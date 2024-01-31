@@ -1,8 +1,8 @@
 {
-  "name": "liwonde-medical-hospital",
+  "name": "liwonde-private-hospital",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "we Treat and God Heals",
+  "author": "Damascus",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
