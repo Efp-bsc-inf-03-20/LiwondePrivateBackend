@@ -14,9 +14,9 @@ export class LaboratoryService {
     }
 
     async findLaborotoryPatientById(ID: number): Promise<Laboratory| undefined> {
-      const patient= this.LaboraotyRepository.findOne({ where: { ID: ID } });
-      return patient;
-  }
+        const patient= this.LaboraotyRepository.findOne({ where: { ID: ID } });
+        return patient;
+    }
    
   async  createLaborotoryPatient(LaborotaryDetails:CreateLaborotoryParams): Promise<void> {
     const newpatientonLaborotory=this.LaboraotyRepository.create({

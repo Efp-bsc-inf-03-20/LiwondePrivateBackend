@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Pharmacy } from 'src/Entitys/Phamarcy.Entity';
 import { Repository } from 'typeorm';
+import { CreatePhamarcyParams, UpdatedPhamarcyParams } from './DTOs/Utils/types';
 
 @Injectable()
 export class PhamarcyServices{
@@ -10,12 +11,25 @@ export class PhamarcyServices{
     constructor(@InjectRepository(Pharmacy) private PhamarcyRepository: Repository<Pharmacy>){ }
 
     async findAllPhamarcyDrug (): Promise<Pharmacy[]>{
-        return this.PhamarcyRepository.find();
-    }
+      return this.PhamarcyRepository.find();
+  }
 
-    async  createPhamarcyDrug(/*dtos here*/):Promise<void>{
+    async findPhamarcyDrugById(ID: number): Promise<Pharmacy| undefined> {
+      const drug= this.PhamarcyRepository.findOne({ where: { DrugID: ID } });
+      return drug;
+  }
+
+
+    async  createPhamarcyDrug(PhamarcyDetails:CreatePhamarcyParams):Promise<void>{
         const newphamarcydrug=this.PhamarcyRepository.create({
-            //dtos here
+          DrugName:PhamarcyDetails.DrugName,
+          DrugType:PhamarcyDetails.DrugType,
+          Quantity:PhamarcyDetails.Quantity,
+          Amount: typeof PhamarcyDetails.Amount === 'string' && PhamarcyDetails.Amount !== '' ? +PhamarcyDetails.Amount : null,
+          MedicalScheme: typeof PhamarcyDetails.MedicalScheme === 'string' && PhamarcyDetails.MedicalScheme !== '' ? PhamarcyDetails.MedicalScheme : null,
+            expiryDate:PhamarcyDetails.expiryDate,
+         
+            CreatedAt: new Date(),
 
         })
         await this.PhamarcyRepository.save(newphamarcydrug);
@@ -30,14 +44,38 @@ export class PhamarcyServices{
         const count = await this.countPhamarcyDrug();
         return `number of drugs in phamarcy is : ${count}`;
       }
-     async  UpdateDrugById(): Promise<void>{
-        //await this.PhamarcyRepository.update();
 
-     }
-     async DeleteDrugById(): Promise<void>{
-        //await this.ReceptionRepository.delete();
+      async UpdatePhamarcyDrugById(ID: number, UpdatedphamarcyDrugDetails: UpdatedPhamarcyParams): Promise<void> {
+        const updateObject: Partial<UpdatedPhamarcyParams> = {};
+    
+        if (UpdatedphamarcyDrugDetails.DrugName !== undefined) {
+            updateObject.DrugName= UpdatedphamarcyDrugDetails.DrugName;
+        }
+    
+        if (UpdatedphamarcyDrugDetails.DrugType!== undefined) {
+            updateObject.DrugType = UpdatedphamarcyDrugDetails.DrugName;
+        }
+    
+        if (UpdatedphamarcyDrugDetails.Quantity !== undefined) {
+            updateObject.Quantity = UpdatedphamarcyDrugDetails.Quantity;
+        }
+    
+        if (UpdatedphamarcyDrugDetails.MedicalScheme !== undefined) {
+            updateObject.MedicalScheme = UpdatedphamarcyDrugDetails.MedicalScheme;
+        }
+    
+       
+    
+        if (Object.keys(updateObject).length > 0) {
+            await this.PhamarcyRepository.update(ID, updateObject);
+        }
+    }
+     async DeletePhamarcyDrugById(DrugID:number): Promise<void>{
+        await this.PhamarcyRepository.delete(DrugID);
       }
-
+    
+    
+    
 
 
 }
