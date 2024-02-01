@@ -20,21 +20,19 @@ export class PhamarcyServices{
   }
 
 
-    async  createPhamarcyDrug(PhamarcyDetails:CreatePhamarcyParams):Promise<void>{
-        const newphamarcydrug=this.PhamarcyRepository.create({
-          DrugName:PhamarcyDetails.DrugName,
-          DrugType:PhamarcyDetails.DrugType,
-          Quantity:PhamarcyDetails.Quantity,
-          Amount: typeof PhamarcyDetails.Amount === 'string' && PhamarcyDetails.Amount !== '' ? +PhamarcyDetails.Amount : null,
-          MedicalScheme: typeof PhamarcyDetails.MedicalScheme === 'string' && PhamarcyDetails.MedicalScheme !== '' ? PhamarcyDetails.MedicalScheme : null,
-            expiryDate:PhamarcyDetails.expiryDate,
-         
-            CreatedAt: new Date(),
+  async createPhamarcyDrug(PhamarcyDetails: CreatePhamarcyParams): Promise<void> {
+    const newphamarcydrug = this.PhamarcyRepository.create({
+        DrugName: PhamarcyDetails.DrugName,
+        DrugType: PhamarcyDetails.DrugType,
+        Quantity: PhamarcyDetails.Quantity,
+        
+        expiryDate:PhamarcyDetails.expiryDate,
+        CreatedAt: new Date(),
+    });
 
-        })
-        await this.PhamarcyRepository.save(newphamarcydrug);
+    await this.PhamarcyRepository.save(newphamarcydrug);
+}
 
-    }
 
     async countPhamarcyDrug(): Promise<number> {
         const count = await this.PhamarcyRepository.count();

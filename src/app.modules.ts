@@ -26,6 +26,9 @@ import { LaboratoryService } from './laboratory/laboratory.service';
 import { LaboratoryController } from './laboratory/laboratory.controller';
 import { Xray } from './Entitys/Xray.Entity';
 import { Laboratory } from './Entitys/Laborotary.Entity';
+import { PhamarcySales } from './Entitys/PhamarcySales.Entity';
+import { Dental } from './Entitys/Dental.Entity';
+import { Vitals } from './Entitys/Vitals.Entity';
 
 @Module({
   imports: [
@@ -36,10 +39,10 @@ import { Laboratory } from './Entitys/Laborotary.Entity';
       username: 'postgres',
       password: '1234',
       database: 'liwondeprivatehospital',
-      entities: [Reception, OPD, Pharmacy, Financial, DaySummary,Backstore,Xray,Laboratory],
+      entities: [Reception, OPD, Pharmacy, Financial, DaySummary,Backstore,Xray,Laboratory,PhamarcySales,Dental,Vitals],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Backstore,Pharmacy,Reception,OPD,Financial,DaySummary,Xray,Laboratory]), 
+    TypeOrmModule.forFeature([Backstore,Pharmacy,Reception,OPD,Financial,DaySummary,Xray,Laboratory,PhamarcySales,Dental,Vitals]), 
   ],
   providers: [
     BackstoreService,
@@ -58,7 +61,10 @@ import { Laboratory } from './Entitys/Laborotary.Entity';
     Financial,
     DaySummary,
     Xray,
-    Laboratory
+    Laboratory,
+    PhamarcySales,
+    Dental,
+    Vitals
   ],
   controllers: [
     AppController,

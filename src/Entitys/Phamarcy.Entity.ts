@@ -23,14 +23,7 @@ export class Pharmacy {
     @IsNumber({}, { message: 'Quantity should be a number' })
     Quantity: number;
 
-    @Column()
-    @IsNumber({}, { message: 'Amount should be a number' })
-    Amount: number;
-
-    @Column()
-    @IsString({ message: 'Medical Scheme should be a string' })
-    MedicalScheme: string;
-
+    
     @Column()
     @IsDate({ message: 'Date should be a valid date' })
     CreatedAt: Date;
@@ -39,3 +32,4 @@ export class Pharmacy {
     @IsString({ message: 'Expiry Date should be a string' })
     expiryDate: string;
 }
+
