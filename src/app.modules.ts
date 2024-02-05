@@ -5,17 +5,20 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { OPD } from './Entitys/OPD.Entity';
 import { DaySummary, Financial } from './Entitys/Financial.Entity';
-import { BackstoreController } from './backstore/backstore.controller';
-import { PhamarcyController } from './phamarcy/phamarcy.controller';
-import { ReceptionController } from './reception/reception.controller';
-import { OpdController } from './opd/opd.controller';
-import { BackstoreService } from './backstore/backstore.service';
-import { ReceptionService } from './reception/reception.service';
-import { OpdService } from './opd/opd.service';
+import { BackstoreController } from './departments/backstore/backstore.controller';
+import { PhamarcyController } from './departments/phamarcy/phamarcy.controller';
+import { ReceptionController } from './departments/reception/reception.controller';
+import { OpdController } from './departments/opd/opd.controller';
+import { BackstoreService } from './departments/backstore/backstore.service';
+import { ReceptionService } from './departments/reception/reception.service';
+import { OpdService } from './departments/opd/opd.service';
 import { Pharmacy } from './Entitys/Phamarcy.Entity';
-import { PhamarcyServices } from './phamarcy/phamarcy.service';
+import { PhamarcyServices } from './departments/phamarcy/phamarcy.service';
 
 import { Backstore } from './Entitys/Backstore.Entity';
+import { StaffController } from './staff/staff.controller';
+import { StaffService } from './staff/Staff.service';
+import { User } from './shared/entities/User.staff.entity';
 
 @Module({
   imports: [
@@ -24,19 +27,19 @@ import { Backstore } from './Entitys/Backstore.Entity';
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      password: '1234',
+      password: 'wtg3g5m95',
       database: 'liwondeprivatehospital',
-      entities: [Reception, OPD, Pharmacy, Financial, DaySummary],
-      synchronize: true,
+      entities: [User, Reception, OPD, Pharmacy, Financial, DaySummary],
+      synchronize: true, // for production set to false.
     }),
-    TypeOrmModule.forFeature([Backstore,Pharmacy,Reception,OPD,Financial,DaySummary]), 
+    TypeOrmModule.forFeature( [Backstore, Pharmacy, User, Reception,OPD,Financial,DaySummary]),
   ],
   providers: [
     BackstoreService,
     AppService,
     PhamarcyServices,
     ReceptionService,
-    OpdService,
+    OpdService, StaffService,
     Backstore,
     Pharmacy,
     Reception ,
@@ -48,7 +51,7 @@ import { Backstore } from './Entitys/Backstore.Entity';
     AppController,
     BackstoreController,
     PhamarcyController,
-    ReceptionController,
+    ReceptionController, StaffController,
     OpdController,
   ],
 })
