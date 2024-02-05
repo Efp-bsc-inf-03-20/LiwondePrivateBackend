@@ -17,14 +17,18 @@ export class DentalService {
       return patient;
   }
    
-  async  createDentalPatient(DentalDetails:createDentalParams): Promise<void> {
-    const newpatientonDental=this.DentalRepository.create({
+  async createDentalPatient(DentalDetails: createDentalParams): Promise<void> {
+    if (DentalDetails.Amount !== null && DentalDetails.MedicalScheme !== null) {
+        throw new Error("Amount and MedicalScheme cannot be entered at once.");
+    }
+
+    const newpatientonDental = this.DentalRepository.create({
         ...DentalDetails,
         Amount: typeof DentalDetails.Amount === 'string' && DentalDetails.Amount !== '' ? +DentalDetails.Amount : null,
         MedicalScheme: DentalDetails.MedicalScheme !== null && typeof DentalDetails.MedicalScheme === 'string' && DentalDetails.MedicalScheme !== '' ? DentalDetails.MedicalScheme : null,
-        Date:new Date(),
+        Date: new Date(),
+    });
 
-    })
     await this.DentalRepository.save(newpatientonDental);
 }
 

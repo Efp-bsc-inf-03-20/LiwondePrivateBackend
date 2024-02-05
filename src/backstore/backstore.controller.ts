@@ -22,14 +22,16 @@ export class BackstoreController {
     @Get()
     @ApiOperation({summary:'get all backstore Drug'})
     @ApiResponse({ status: 200, description: ' backstore drug Retrieved  Successfully ' })
-    findAllBackstoreDrugs(): string {
-      return 'find all Backstore Drugs';
+    async findAllBackstoreDrugs() {
+      const drugs= await this.BackstoreServices.findAllBackstoreDrugs();
+      return drugs;
 
     }
+  
     @Get(':ID')
     @ApiOperation({summary:'get a backstore drug '})
     @ApiResponse({ status: 200, description: 'return a certain drug in backstore ' })
-    async getbackstoreDrugById(@Param('id') id: number): Promise<Backstore| undefined> {
+    async getbackstoreDrugById(@Param('ID') id: number): Promise<Backstore| undefined> {
       return this.BackstoreServices.getbackstoreDrugById(id);
     }
 
@@ -37,13 +39,22 @@ export class BackstoreController {
     @ApiOperation({summary:'update backstore Drug'})
     @ApiResponse({ status: 200, description: 'backstore drug updated   Successfully ' })
 
+    async  UpdateBackstoreDrugsById(@Param('ID',ParseIntPipe) ID:number,@Body() UpbackstoreDto:UpdateBackstoreDto){
+      await this.BackstoreServices.UpdateBackstoreDrugsById(ID,UpbackstoreDto)
+      
+        return 'backstoreDrug updated sucessfully'
+    }
+
+ 
+
     
   
 
     @Delete(':ID')
     @ApiOperation({summary:'delete  backstore Drug'})
     @ApiResponse({ status: 200, description: 'backstore drug deleted  Successfully ' })
-    DeleteBackStoreDrugById(){
+   async  DeleteBackStoreDrugById(@Param('ID',ParseIntPipe)ID:number){
+    await  this.BackstoreServices.deleteBackStoreDrugById(ID);
         return 'backstore drug deleted sucessfully'
     }
 

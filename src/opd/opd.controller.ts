@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { OpdService } from './opd.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateOpdDto } from './DTOs/CreateOpdDto';
@@ -12,7 +12,23 @@ export class OpdController {
     @Post()
     @ApiOperation({summary:'OPD patient created succesfully'})
     @ApiResponse({ status: 200, description: 'opd patient  created Successful ' })
+
     CreateOPDPatient(@Body() CreateOpdDto:CreateOpdDto): string {
+      try {
+        this.OpdServices.CreateOPDPatient(CreateOpdDto);
+        return 'opd patient created successfully';
+        
+    } catch (error) {
+        // Check for the specific error related to both "Amount" and "MedicalScheme"
+        if (error.message === 'Amount and MedicalScheme cannot be entered at once.') {
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+        } else {
+            // Handle other errors or send a generic error message
+            throw new HttpException('An error occurred while creating the dental patient', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
       this.OpdServices.CreateOPDPatient(CreateOpdDto)
       return 'patient registered sucessfully';
     }

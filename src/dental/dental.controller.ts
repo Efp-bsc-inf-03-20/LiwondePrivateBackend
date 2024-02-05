@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateDentalDTO } from './DTOs/CreateDentalDto';
 import { DentalService } from './dental.service';
@@ -14,11 +14,21 @@ export class DentalController {
 
     @ApiOperation({summary:'Dental patient created '})
     @ApiResponse({ status: 200, description: 'Dental patient created successfullly ' })
-    createDentalPatient(@Body() DentalDTO:CreateDentalDTO): string {
-        this.DentalServices.createDentalPatient(DentalDTO)
-        return 'Dental patient created sucessfully';
-      }
-    
+    createDentalPatient(@Body() DentalDTO: CreateDentalDTO): string {
+        try {
+            this.DentalServices.createDentalPatient(DentalDTO);
+            return 'Dental patient created successfully';
+        } catch (error) {
+            // Check for the specific error related to both "Amount" and "MedicalScheme"
+            if (error.message === 'Amount and MedicalScheme cannot be entered at once.') {
+                throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+            } else {
+                // Handle other errors or send a generic error message
+                throw new HttpException('An error occurred while creating the dental patient', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
     @Get()
     @ApiOperation({summary:'return all Dental patients'})
     @ApiResponse({ status: 200, description: 'return all Dental patient  ' })
@@ -42,7 +52,7 @@ export class DentalController {
     async  UpdateDentalPatientById(@Param('ID',ParseIntPipe) ID:number,@Body() UpDentalDto:UpdatedDentalDTO){
         await this.DentalServices.UpdateDentalPatientById(ID,UpDentalDto)
         
-          return 'lab patient updated sucessfully'
+          return 'dental patient updated sucessfully'
       }
 
   

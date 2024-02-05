@@ -14,7 +14,7 @@ export class BackstoreService {
   }
 
   async getbackstoreDrugById(id: number): Promise<Backstore | undefined> {
-    const backstoredrug = await this.BackstoreRepository.findOne({ where: { DrugID: id } });
+    const backstoredrug = await this.BackstoreRepository.findOne({ where: { ID: id } });
 
     return backstoredrug;
   }
@@ -25,7 +25,8 @@ export class BackstoreService {
       DrugType:BackstoreDetails.DrugType,
       Quantity:BackstoreDetails.Quantity,
       expiryDate:BackstoreDetails.expiryDate,
-      CreatedAt:BackstoreDetails.CreatedAt,
+      CreatedAt:new Date(),
+      
 
  
       
@@ -43,14 +44,34 @@ export class BackstoreService {
     const count = await this.countbackstoredrug();
     return `Number of drugs in the backstore is: ${count}`;
   }
+  async UpdateBackstoreDrugsById(ID: number, UpdatedBackstoreDrugDetails: UpdatedBackstoreParams): Promise<void> {
+    const updateObject: Partial<UpdatedBackstoreParams> = {};
 
- 
+    if (UpdatedBackstoreDrugDetails.DrugName !== undefined) {
+      updateObject.DrugName = UpdatedBackstoreDrugDetails.DrugName;
+    }
+
+    if (UpdatedBackstoreDrugDetails.DrugType !== undefined) {
+      updateObject.DrugType = UpdatedBackstoreDrugDetails.DrugType;
+    }
+
+    if (UpdatedBackstoreDrugDetails.Quantity !== undefined) {
+      updateObject.Quantity = UpdatedBackstoreDrugDetails.Quantity
+    }
+
+    if (UpdatedBackstoreDrugDetails.expiryDate !== undefined) {
+   updateObject.expiryDate=UpdatedBackstoreDrugDetails.expiryDate
+    }
+    if (Object.keys(updateObject).length > 0) {
+    await this.BackstoreRepository.update(ID,updateObject);
+    }
+  }
 
     
   
 
-  async deleteBackStoreDrugById(@Param('id',ParseIntPipe)id:number): Promise<void> {
+  async deleteBackStoreDrugById(@Param('ID',ParseIntPipe)id:number): Promise<void> {
    
-    await this.BackstoreRepository.delete({ DrugID: id });
+    await this.BackstoreRepository.delete({ ID: id });
   }
 }

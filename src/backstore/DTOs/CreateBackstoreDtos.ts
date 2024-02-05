@@ -13,7 +13,7 @@ export class CreateBackstoreDTO {
     Quantity: number;
 
     @ApiProperty({ description: 'expirty date ' })
-    expiryDate?: string;
+    expiryDate: string;
 
 
     @ApiProperty({ description: 'expirty date ' })

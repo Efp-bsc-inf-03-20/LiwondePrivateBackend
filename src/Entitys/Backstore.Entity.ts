@@ -5,7 +5,7 @@ import { IsNotEmpty, IsString, IsNumber, IsDate } from 'class-validator';
 export class Backstore {
 @PrimaryGeneratedColumn()
   @IsNumber({}, { message: 'Drug ID should be a number' })
-  DrugID: number;
+  ID: number;
 
   @Column({ nullable: false })
   @IsNotEmpty({ message: 'Drug Name should not be empty' })
@@ -24,7 +24,7 @@ export class Backstore {
 
   @Column()
   //@IsDate({ message: 'Expiry Date should be a valid date' })
-  expiryDate?: string;
+  expiryDate: string;
 
 @Column()
   CreatedAt: Date;

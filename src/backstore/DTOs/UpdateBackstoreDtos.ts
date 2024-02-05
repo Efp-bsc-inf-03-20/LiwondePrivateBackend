@@ -13,7 +13,7 @@ export class UpdateBackstoreDto {
     Quantity: number;
 
     @ApiProperty({ description: 'Updated expiry date ' })
-    expiryDate?: string;
+    expiryDate: string;
 
     @ApiProperty({ description: 'Updated drug created date' })
     CreatedAt: Date;

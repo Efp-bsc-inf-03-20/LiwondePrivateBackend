@@ -17,8 +17,13 @@ export class OpdService {
         return patient;
     }
 
-    async CreateOPDPatient(OpdDetails: createOpdParams): Promise<void> {
+    async CreateOPDPatient(OpdDetails: createOpdParams): Promise<void> {  
+         if (OpdDetails.Amount !== null && OpdDetails.MedicalScheme !== null) {
+        throw new Error("Amount and MedicalScheme cannot be entered at once.");
+    }
+
         const newOPDPatient = this.OPDRepository.create({
+            
             FirstName: OpdDetails.FirstName,
             LastName: OpdDetails.LastName,
             Treatment: OpdDetails.Treatment,
