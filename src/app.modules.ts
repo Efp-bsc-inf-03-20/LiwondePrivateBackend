@@ -29,6 +29,8 @@ import { Laboratory } from './Entitys/Laborotary.Entity';
 import { PhamarcySales } from './Entitys/PhamarcySales.Entity';
 import { Dental } from './Entitys/Dental.Entity';
 import { Vitals } from './Entitys/Vitals.Entity';
+import { VitalsController } from './vitals/vitals.controller';
+import { VitalsService } from './vitals/vitals.service';
 
 @Module({
   imports: [
@@ -36,9 +38,8 @@ import { Vitals } from './Entitys/Vitals.Entity';
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'postgres',
-      password: '1234',
-      database: 'liwondeprivatehospital',
+      url:"postgres://jhxtzhpp:Ax7lDlN81kXio7XGO4Zi_S_QC8Tj3W7d@baasu.db.elephantsql.com/jhxtzhpp",
+    
       entities: [Reception, OPD, Pharmacy, Financial, DaySummary,Backstore,Xray,Laboratory,PhamarcySales,Dental,Vitals],
       synchronize: true,
     }),
@@ -54,6 +55,7 @@ import { Vitals } from './Entitys/Vitals.Entity';
     XRayService,
     DentalService,
     OpdService,
+    VitalsService,
     Backstore,
     Pharmacy,
     Reception ,
@@ -75,7 +77,8 @@ import { Vitals } from './Entitys/Vitals.Entity';
     ReceptionController,
     OpdController,
     XRayController,
-    DentalController
+    DentalController,
+    VitalsController
   ],
 })
 export class AppModule {}
