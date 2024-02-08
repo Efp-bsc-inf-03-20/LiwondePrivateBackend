@@ -1,5 +1,5 @@
 export type createOpdParams={
-    ID:number;
+
     FirstName:string;
     LastName:string;
     Treatment:string;
@@ -11,7 +11,7 @@ export type createOpdParams={
 
 }
 export class UpdateOpdParams {
-    ID?: number;
+    
     FirstName?: string;
     LastName?: string;
     Treatment?: string;

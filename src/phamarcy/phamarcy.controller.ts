@@ -38,6 +38,7 @@ export class PhamarcyController {
 
 
   }
+  //not working
     @Put()
     @ApiOperation({summary:' phamarcy Drug updated succesfull' })
     @ApiResponse({ status: 200, description: 'phamarcy drug updated sucessfully ' })
@@ -48,9 +49,10 @@ export class PhamarcyController {
         return 'phamarcy drug updated sucessfully'
     }
 
+    //not working
     @Delete()
-    @ApiOperation({summary:' phamarcy Drug deletedm sucessfully'})
-    @ApiResponse({ status: 200, description: 'phamarcy drug deleted Successful ' })
+    @ApiOperation({summary:' phamarcy Drug deleted sucessfully'})
+    @ApiResponse({ status: 200, description: 'phamarcy drug deleted Successfully ' })
 
     DeletePhamarcyDrugById(@Param('DrugID',ParseIntPipe)DrugID:number){
       this.PhamarcyServices.DeletePhamarcyDrugById(DrugID);

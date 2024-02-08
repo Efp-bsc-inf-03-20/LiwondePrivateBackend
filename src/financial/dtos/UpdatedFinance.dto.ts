@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class UpdateFinanceDto {
     @ApiProperty({ description: 'Updated first name of the patient' })
-    Firstname: string;
+    FirstName: string;
 
     @ApiProperty({ description: 'Updated last name of the patient' })
     LastName: string;

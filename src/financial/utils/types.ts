@@ -13,7 +13,7 @@ export type createDaySummaryParams={
 
 }
 export type UpdateFinanceParams={
-    Firstname:string;
+    FirstName:string;
     LastName:string;
     Treatment:string;
     Amount:number;

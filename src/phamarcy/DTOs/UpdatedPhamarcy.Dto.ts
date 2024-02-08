@@ -13,12 +13,7 @@ export class UpdatedPhamarcyDTO {
     Quantity: number;
 
 
-    @ApiProperty({ description: 'Amount paid' })
-    Amount: number;
-
-    @ApiProperty({ description: 'Amount paid' })
-    MedicalScheme: string;
-
+  
     @ApiProperty({ description: 'Amount paid' })
     expiryDate: string
 

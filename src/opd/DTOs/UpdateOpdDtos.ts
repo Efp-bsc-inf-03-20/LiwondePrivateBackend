@@ -1,9 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class UpdateOpdDto {
-    @ApiProperty({ description: 'Unique identifier for the OPD record' })
-    ID: number;
-
+ 
     @ApiProperty({ description: 'Updated first name of the patient' })
     FirstName: string;
 

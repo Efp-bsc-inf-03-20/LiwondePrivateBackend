@@ -58,8 +58,8 @@ export class PhamarcyServices{
             updateObject.Quantity = UpdatedphamarcyDrugDetails.Quantity;
         }
     
-        if (UpdatedphamarcyDrugDetails.MedicalScheme !== undefined) {
-            updateObject.MedicalScheme = UpdatedphamarcyDrugDetails.MedicalScheme;
+        if (UpdatedphamarcyDrugDetails.expiryDate !== undefined) {
+            updateObject.expiryDate = UpdatedphamarcyDrugDetails.expiryDate;
         }
     
        

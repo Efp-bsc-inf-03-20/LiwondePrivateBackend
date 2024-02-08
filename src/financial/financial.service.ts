@@ -44,8 +44,8 @@ export class FinancialService {
       async UpdateFinancialPatientById(id: number, UpdatedfinanceDetails: UpdateFinanceParams): Promise<void> {
         const updateObject: Partial<UpdateFinanceParams> = {};
 
-        if (UpdatedfinanceDetails.Firstname !== undefined) {
-            updateObject.Firstname= UpdatedfinanceDetails.Firstname;
+        if (UpdatedfinanceDetails.FirstName !== undefined) {
+            updateObject.FirstName= UpdatedfinanceDetails.FirstName;
         }
 
         if (UpdatedfinanceDetails.LastName !== undefined) {

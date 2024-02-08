@@ -24,8 +24,10 @@ export class PhamarcySales{
     @Column()
     DrugName:string;
 
+    @Column({nullable:true})
     @IsNotEmpty({ message: 'Drug Type should not be empty' })
     @IsString({ message: 'Drug Type should be a string' })
+  
     DrugType: string;
 
     @Column({nullable:true})
