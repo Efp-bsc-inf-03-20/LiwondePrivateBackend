@@ -30,26 +30,23 @@ export class PharmacySalesController {
          return patients;
   
       }
-  
       @Get(':name')
       @ApiOperation({ summary: 'Search pharmacy sales by name' })
       @ApiResponse({ status: 200, description: 'Pharmacy sales found successfully' })
-      async findPharmacySalesByName(@Query() queryParams: { FirstName?: string; LastName?: string }): Promise<PhamarcySales[] | string> {
-        const { FirstName, LastName } = queryParams;
-    
-        if (!FirstName && !LastName) {
-          return 'First name or last name is not provided';
+      async findPharmacySalesByName(@Param('name') name: string): Promise<PhamarcySales[] | string> {
+        if (!name) {
+          return 'Name is not provided';
         }
-    
-        const results = await this.PhamarcysalesServices.findPharmacySalesByName(FirstName,LastName);
-    
+      
+        const results = await this.PhamarcysalesServices.findPharmacySalesByName(name);
+      
         if (results.length === 0) {
-          return 'name  not found';
+          return 'Name not found';
         }
-    
+      
         return results;
       }
-  
+      
     @Put(':ID')
     @ApiOperation({ summary: 'update a patient by id in phamarcysales ' })
     @ApiResponse({ status: 200, description: ' patient in phamarcysales updated successfully' })
