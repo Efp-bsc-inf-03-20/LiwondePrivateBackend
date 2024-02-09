@@ -5,16 +5,16 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 export class Reception {
 
   @PrimaryGeneratedColumn()
-  PatientID: number;
+  ID: number;
 
   @Column({ nullable: false })
   @IsString({message:'name must be a string'})
   @IsNotEmpty({message:'name can not be empty'})
-  firstName: string;
+  FirstName: string;
 
   @Column({ nullable: false })
   @IsNotEmpty({message:'name can not be empty'})
-  lastName: string;
+  LastName: string;
 
   @Column({ nullable: false }) 
   @IsNotEmpty({message:'name can not be empty'})

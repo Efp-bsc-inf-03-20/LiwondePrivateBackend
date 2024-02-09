@@ -4,7 +4,7 @@ import { IsNotEmpty, IsString, IsNumber, IsDate, IsPositive } from 'class-valida
 @Entity()
 export class Financial {
   @PrimaryGeneratedColumn()
-  ID: number;
+  id: number;
 
   @Column({ nullable: false })
   @IsNotEmpty({ message: 'First Name should not be empty' })
@@ -14,7 +14,7 @@ export class Financial {
   @Column({ nullable: false })
   @IsNotEmpty({ message: 'Last Name should not be empty' })
   @IsString({ message: 'Last Name should be a string' })
-  Lastname: string;
+  LastName: string;
 
   @Column({ nullable: false })
   @IsNotEmpty({ message: 'Treatment should not be empty' })

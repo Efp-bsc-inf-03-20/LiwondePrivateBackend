@@ -1,10 +1,10 @@
-import { Entity, Column, PrimaryColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { IsNotEmpty, IsNumber, IsString, IsDate } from 'class-validator';
 
 @Entity()
 export class Pharmacy {
 
-    @PrimaryColumn({ unique: true })
+    @PrimaryGeneratedColumn()
     @IsNumber({}, { message: 'Drug ID should be a number' })
     DrugID: number;
 
@@ -23,19 +23,13 @@ export class Pharmacy {
     @IsNumber({}, { message: 'Quantity should be a number' })
     Quantity: number;
 
-    @Column()
-    @IsNumber({}, { message: 'Amount should be a number' })
-    Amount: number;
-
-    @Column()
-    @IsString({ message: 'Medical Scheme should be a string' })
-    MedicalScheme: string;
-
+    
     @Column()
     @IsDate({ message: 'Date should be a valid date' })
-    Date: Date;
+    CreatedAt: Date;
 
     @Column()
     @IsString({ message: 'Expiry Date should be a string' })
     expiryDate: string;
 }
+

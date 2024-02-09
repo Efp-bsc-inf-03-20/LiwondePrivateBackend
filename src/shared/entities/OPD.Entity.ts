@@ -1,13 +1,11 @@
-import { Entity, Column, BeforeInsert, BaseEntity, PrimaryColumn } from 'typeorm';
+import { Entity, Column, BeforeInsert, BaseEntity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
 
-let counter = 0;
 
 @Entity()
-export class OPD extends BaseEntity {
-  @PrimaryColumn()
-  @IsString({ message: 'Doctor ID should be a string' })
-  DoctorID: string;
+export class OPD  {
+  @PrimaryGeneratedColumn()
+  ID:number;
 
   @Column({ nullable: false })
   @IsNotEmpty({ message: 'First Name should not be empty' })
@@ -24,27 +22,18 @@ export class OPD extends BaseEntity {
   @IsString({ message: 'Treatment should be a string' })
   Treatment: string;
 
-  @Column()
-  @IsNumber({}, { message: 'Amount should be a number' })
-  Amount: string;
 
-  @Column()
-  @IsString({ message: 'Department should be a string' })
+  @Column({nullable:true})
+  @IsNumber({}, { message: 'Amount should be a number' })
+  Amount: number;
+
+  @Column({nullable:true})
+  @IsString({ message: 'medical scheme should be a string' })
   MedicalScheme: string;
 
   @Column()
-  @IsString({ message: 'Department should be a string' })
-  Department: string;
+  @IsString({ message: 'Date should be valid' })
+  Date: Date;
 
-  @BeforeInsert()
-  generateDoctorID() {
-    // Increment the counter
-    counter++;
-
-    // Format the counter with leading zeros
-    const formattedCounter = counter.toString().padStart(3, '0');
-
-    // Set the DoctorID
-    this.DoctorID = `LPH${formattedCounter}`;
-  }
+  
 }
