@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
+import { AuthMiddleware } from 'src/LPH.auth.middleware';
 import { RolesGuard } from 'src/LPH.roles.guard';
-import { AuthMiddleware } from './keep';
 
 @Module( {
   imports: [/* ... */],

@@ -1,9 +1,9 @@
 
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Pharmacy } from 'src/Entitys/Phamarcy.Entity';
 import { Repository } from 'typeorm';
 import { CreatePhamarcyParams, UpdatedPhamarcyParams } from './DTOs/Utils/types';
+import { Pharmacy } from 'src/shared/entities/Phamarcy.Entity';
 
 @Injectable()
 export class PhamarcyServices{
@@ -25,7 +25,7 @@ export class PhamarcyServices{
         DrugName: PhamarcyDetails.DrugName,
         DrugType: PhamarcyDetails.DrugType,
         Quantity: PhamarcyDetails.Quantity,
-        
+
         expiryDate:PhamarcyDetails.expiryDate,
         CreatedAt: new Date(),
     });
@@ -45,25 +45,25 @@ export class PhamarcyServices{
 
       async UpdatePhamarcyDrugById(ID: number, UpdatedphamarcyDrugDetails: UpdatedPhamarcyParams): Promise<void> {
         const updateObject: Partial<UpdatedPhamarcyParams> = {};
-    
+
         if (UpdatedphamarcyDrugDetails.DrugName !== undefined) {
             updateObject.DrugName= UpdatedphamarcyDrugDetails.DrugName;
         }
-    
+
         if (UpdatedphamarcyDrugDetails.DrugType!== undefined) {
             updateObject.DrugType = UpdatedphamarcyDrugDetails.DrugName;
         }
-    
+
         if (UpdatedphamarcyDrugDetails.Quantity !== undefined) {
             updateObject.Quantity = UpdatedphamarcyDrugDetails.Quantity;
         }
-    
+
         if (UpdatedphamarcyDrugDetails.expiryDate !== undefined) {
             updateObject.expiryDate = UpdatedphamarcyDrugDetails.expiryDate;
         }
-    
-       
-    
+
+
+
         if (Object.keys(updateObject).length > 0) {
             await this.PhamarcyRepository.update(ID, updateObject);
         }
@@ -71,13 +71,12 @@ export class PhamarcyServices{
      async DeletePhamarcyDrugById(DrugID:number): Promise<void>{
         await this.PhamarcyRepository.delete(DrugID);
       }
-    
-    
-    
+
+
+
 
 
 }
 
- 
-   
-      
+
+

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Dental } from 'src/Entitys/Dental.Entity';
 import { Repository } from 'typeorm';
 import { UpdatedDentalParams, createDentalParams } from './Utils/types';
+import { Dental } from 'src/shared/entities/Dental.Entity';
 
 @Injectable()
 export class DentalService {
@@ -16,7 +16,7 @@ export class DentalService {
       const patient= this.DentalRepository.findOne({ where: { ID: ID } });
       return patient;
   }
-   
+
   async createDentalPatient(DentalDetails: createDentalParams): Promise<void> {
     if (DentalDetails.Amount !== null && DentalDetails.MedicalScheme !== null) {
         throw new Error("Amount and MedicalScheme cannot be entered at once.");
@@ -32,13 +32,13 @@ export class DentalService {
     await this.DentalRepository.save(newpatientonDental);
 }
 
-  
+
     async countPatients(): Promise<number> {
         const count = await this.DentalRepository.count();
         return count;
       }
-  
-  
+
+
       async countPatientsWithMessage(): Promise<string> {
         const count = await this.countPatients();
         return `This is the number of patients in dental: ${count}`;

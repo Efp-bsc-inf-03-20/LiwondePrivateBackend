@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Vitals } from 'src/Entitys/Vitals.Entity';
 import { Repository } from 'typeorm';
 import { CreateVitalsParams, UpdateVitalsParams } from './utils/types';
+import { Vitals } from 'src/shared/entities/Vitals.Entity';
 
 @Injectable()
 export class VitalsService {
@@ -17,8 +17,8 @@ export class VitalsService {
       return patient;
   }
 
-  
-  
+
+
   async  createvitalslPatient(vitalsDetails:CreateVitalsParams): Promise<void> {
     const newpatientonvitals=this.vitalsRepository.create({
         ...vitalsDetails,
@@ -28,18 +28,18 @@ export class VitalsService {
     await this.vitalsRepository.save(newpatientonvitals);
 }
 
-  
+
     async countPatients(): Promise<number> {
         const count = await this.vitalsRepository.count();
         return count;
       }
-  
-  
+
+
       async countPatientsWithMessage(): Promise<string> {
         const count = await this.countPatients();
         return `This is the number of patients on vitals today: ${count}`;
       }
-  
+
       async UpdatevitalsPatientById(id: number, UpdatedvitalsDetails: UpdateVitalsParams): Promise<void> {
         const updateObject: Partial<UpdateVitalsParams> = {};
 
@@ -70,7 +70,7 @@ export class VitalsService {
      async DeletevitalsPatientById(id:number): Promise<void>{
         await this.vitalsRepository.delete(id);
       }
-  
+
 
 }
 

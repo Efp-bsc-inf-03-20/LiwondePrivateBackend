@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Reception } from 'src/Entitys/Reception.Entity';
 import { Repository } from 'typeorm';
-import { CreateReceptionDTO } from './DTOs/ReceptionDtos';
 import { UpdateReceptionParams, createReceptionParams } from './Utils/types';
+import { Reception } from 'src/shared/entities/Reception.Entity';
 
 @Injectable()
 export class ReceptionService{
@@ -24,7 +23,7 @@ async createReception(ReceptionDetails:createReceptionParams): Promise<void> {
         FirstName:ReceptionDetails.FirstName,
         LastName:ReceptionDetails.LastName,
         PhoneNumber:ReceptionDetails.PhoneNumber,
-    
+
         PaymentMethod:ReceptionDetails.PaymentMethod,
         Date: new Date(),
 
@@ -72,13 +71,13 @@ async createReception(ReceptionDetails:createReceptionParams): Promise<void> {
       await this.ReceptionRepository.delete(ID);
     }
 
-     
-
-      
-      
 
 
-   
+
+
+
+
+
 
 
 

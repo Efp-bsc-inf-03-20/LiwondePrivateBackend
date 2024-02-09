@@ -2,8 +2,8 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LaboratoryService } from './laboratory.service';
 import { CreateLaborotoryDTO } from './DTOs/CreateLabotory.Dto';
-import { Laboratory } from 'src/Entitys/Laborotary.Entity';
 import { UpdatedLaborotoryDTO } from './DTOs/UpdateLabotory.Dto';
+import { Laboratory } from 'src/shared/entities/Laborotary.Entity';
 
 @Controller('laboratory')
 @ApiTags('Laboratory')
@@ -27,7 +27,7 @@ export class LaboratoryController {
     async findAllLabotoryPatients(){
         const patients= await this.LaborotoryServices.findAllLabotoryPatients();
         return patients;
-  
+
 
     }
     @Get(':ID')
@@ -40,10 +40,10 @@ export class LaboratoryController {
     @Put(':ID')
     @ApiOperation({summary:'update Laboratory patient by id'})
     @ApiResponse({ status: 200, description: 'Laboratory patient updated successfullly ' })
-    
+
     async UpdateLaborotoryPatientById(@Param('ID',ParseIntPipe) ID:number,@Body() UpadatedLabDto:UpdatedLaborotoryDTO){
         await this.LaborotoryServices.UpdateLaborotoryPatientById(ID,UpadatedLabDto)
-        
+
           return 'lab patient updated sucessfully'
       }
 
@@ -55,5 +55,5 @@ export class LaboratoryController {
         this.LaborotoryServices.DeleteLabPatientById(ID);
           return 'lab patient deleted sucessfully'
       }
-  
+
 }

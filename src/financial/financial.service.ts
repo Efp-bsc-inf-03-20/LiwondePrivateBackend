@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Financial } from 'src/Entitys/Financial.Entity';
 import { Repository } from 'typeorm';
-import { UpdateFinanceDto } from './dtos/UpdatedFinance.dto';
 import { UpdateFinanceParams, createFinanceParams } from './utils/types';
+import { Financial } from 'src/shared/entities/Financial.Entity';
 
 @Injectable()
 export class FinancialService {
@@ -18,8 +17,8 @@ export class FinancialService {
       return patient;
   }
 
-  
-  
+
+
   async  createFinancialPatient(FinancialDetails:createFinanceParams): Promise<void> {
     const newpatientonreception=this.FinancialRepository.create({
         ...FinancialDetails,
@@ -29,18 +28,18 @@ export class FinancialService {
     await this.FinancialRepository.save(newpatientonreception);
 }
 
-  
+
     async countPatients(): Promise<number> {
         const count = await this.FinancialRepository.count();
         return count;
       }
-  
-  
+
+
       async countPatientsWithMessage(): Promise<string> {
         const count = await this.countPatients();
         return `This is the number of patients paid today: ${count}`;
       }
-  
+
       async UpdateFinancialPatientById(id: number, UpdatedfinanceDetails: UpdateFinanceParams): Promise<void> {
         const updateObject: Partial<UpdateFinanceParams> = {};
 
@@ -71,6 +70,6 @@ export class FinancialService {
      async DeletePatientById(id:number): Promise<void>{
         await this.FinancialRepository.delete(id);
       }
-  
+
 
 }
