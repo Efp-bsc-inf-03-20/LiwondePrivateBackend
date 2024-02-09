@@ -80,5 +80,4 @@ export class StaffController {
   async deleteStaffById( @Param( 'id' ) id: number ) {
     return this.staffService.deleteStaffById( id );
   }
-
 }
