@@ -1,4 +1,6 @@
 import { SetMetadata } from '@nestjs/common';
-import { UserRole } from './auth/roles.enum';
+import { LPHStaffRole } from './auth/roles.enum';
 
-export const Roles = ( ...roles: UserRole[] ) => SetMetadata( 'roles', roles );
+export const ROLES_KEY = 'roles'; // Define the constant for clarity
+
+export const Roles = ( ...roles: LPHStaffRole[] ) => SetMetadata( ROLES_KEY, roles );

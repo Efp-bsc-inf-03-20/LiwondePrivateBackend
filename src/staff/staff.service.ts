@@ -5,37 +5,49 @@ import { Request, Response } from 'express';
 import { User } from '../shared/entities/User.staff.entity';
 import * as bcryptjs from 'bcryptjs';
 import { verify, sign } from 'jsonwebtoken';
-import { UpdateStaffDto } from '../shared/dto/update-staff.dto';
 
 @Injectable()
 export class StaffService {
   constructor( @InjectRepository( User ) private staffRepository: Repository<User> ) { }
   private generateRandomUsername( firstName: string, lastName: string, roles: string[] ): string {
     // Logic to generate a random username based on first name, last name, and roles
-    // Adjust this logic based on your specific requirements
     const randomSuffix = Math.floor( Math.random() * 1000 );
     return `${firstName.toLowerCase()}_${lastName.toLowerCase()}_${roles.join( '_' )}_${randomSuffix}`;
   }
   async loginStaff( user: User, res: Response ) {
-    const { email, password } = user;
+    const { username, password } = user;
+
     // Check for required fields
-    if ( !email?.trim() || !password?.trim() ) {
+    if ( !username?.trim() || !password?.trim() ) {
       return res.status( 500 ).send( { message: 'Not all required fields have been filled in.' } );
     }
 
-    const staffMember = await this.staffRepository.findOne( { where: { email } } );
+    const staffMember = await this.staffRepository.findOne( { where: { username } } );
 
     // Staff not found or wrong password
     if ( !staffMember || !( await bcryptjs.compare( password, staffMember.password ) ) ) {
-      res.status( 500 ).send( { message: 'Invalid Credentials.' } );
+      return res.status( 500 ).send( { message: 'Invalid Credentials.' } );
     }
 
-    const accessToken = sign( { id: staffMember.id }, 'access_secret', { expiresIn: 60 * 60 } );
-    const refreshToken = sign( { id: staffMember.id }, 'refresh_secret', { expiresIn: 24 * 60 * 60 } );
+    // Check user's role
+    if ( staffMember.roles.includes( 'admin' ) ) {
+      // User is an admin, grant full access
+      const accessToken = sign( { id: staffMember.id, role: staffMember.roles }, 'access_secret', { expiresIn: 60 * 60 } );
+      const refreshToken = sign( { id: staffMember.id, role: staffMember.roles }, 'refresh_secret', { expiresIn: 24 * 60 * 60 } );
 
-    res.cookie( 'accessToken', accessToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 } ); // 1 day
-    res.cookie( 'refreshToken', refreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 } ); // 7 days
-    res.status( 200 ).send( { message: 'login success' } );
+      res.cookie( 'accessToken', accessToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 } ); // 1 day
+      res.cookie( 'refreshToken', refreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 } ); // 7 days
+      res.status( 200 ).send( { message: 'login success(full access)' } );
+    } else if ( staffMember.roles.includes( 'doctor' ) ) {
+      // User is a doctor, grant limited access
+      const accessToken = sign( { id: staffMember.id, role: staffMember.roles }, 'access_secret', { expiresIn: 60 * 60 } );
+
+      res.cookie( 'accessToken', accessToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 } ); // 1 day
+      res.status( 200 ).send( { message: 'login success (limited access)' } );
+    } else {
+      // User has an unrecognized role, deny access
+      return res.status( 403 ).send( { message: 'Forbidden' } );
+    }
   }
 
   async authStaff( req: Request, res: Response ) {
@@ -64,8 +76,6 @@ export class StaffService {
     try {
       const refreshToken = req.cookies['refreshToken'];
       const payload: any = verify( refreshToken, 'refresh_secret' );
-
-      const consoleDotLog = console.log( 'user not logged in' );
       if ( !payload ) {
         return res.status( 401 ).send( { message: 'Unauthenticated.' } );
       }
@@ -74,8 +84,8 @@ export class StaffService {
       return res.status( 200 ).send( { message: 'refresh success' } );
     } catch ( error ) {
       console.error( error );
-      console.log( 'status( 500 ) user not logged in' );
-      return res.status( 500 ).send( { message: 'User not Logged in.' } );
+      console.log( 'status( 500 ) admin not logged in' );
+      return res.status( 500 ).send( { message: 'Admin not Logged in.' } );
 
     }
   }
@@ -93,17 +103,22 @@ export class StaffService {
 
   async registerStaff( user: User, res: Response ) {
     const { firstName, lastName, dateOfBirth, phoneNumber, email, password, roles } = user;
+
     // Check for required fields
     if ( !firstName?.trim() || !lastName?.trim() || !dateOfBirth || !phoneNumber?.trim() || !email?.trim() || !password?.trim() ) {
       throw new BadRequestException( 'Not all required fields have been filled in.' );
     }
+
     try {
       // Check if a user with the given email already exists
       const existingUser = await this.staffRepository.findOne( { where: { email } } ) as User;
       if ( existingUser ) {
         throw new BadRequestException( 'There is already a user with this email.' );
       }
-
+      const accessToken = sign( { id: user.id, role: user.roles }, 'access_secret', { expiresIn: 60 * 60 } );
+      if ( user.roles.includes( 'admin' ) ) {
+        res.cookie( 'accessToken', accessToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 } ); // 1 day
+      }
       // Generate a random username based on first name, last name, and a role
       const username = this.generateRandomUsername( firstName, lastName, roles );
 
@@ -111,7 +126,7 @@ export class StaffService {
       const hashedPassword = await bcryptjs.hash( password, 12 );
 
       // Save the new user
-      const newUser = await this.staffRepository.save( {
+      await this.staffRepository.save( {
         firstName,
         lastName,
         dateOfBirth,
@@ -123,7 +138,11 @@ export class StaffService {
       } );
 
       // Respond with the generated username and password
-      res.status( 200 ).json( { message: 'Staff registered successfully', username, password } );
+      res.status( 200 ).json( {
+        message: 'Staff registered successfully',
+        username,
+        hashedPassword
+      } );
     } catch ( error ) {
       console.error( error );
 
@@ -148,14 +167,14 @@ export class StaffService {
     return await this.staffRepository.count();
   }
 
-  async updateStaffById( staffId: number, updateStaffDto: UpdateStaffDto ) {
+  async updateStaffById( staffId: number, user: User ) {
     const staff = await this.findStaffById( staffId );
 
     if ( !staff ) {
       throw new NotFoundException();
     }
 
-    Object.assign( staff, updateStaffDto );
+    Object.assign( staff, user );
     return await this.staffRepository.save( staff );
   }
 

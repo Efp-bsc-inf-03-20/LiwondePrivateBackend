@@ -1,10 +1,9 @@
-
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IsNotEmpty, IsString, IsNumber, IsEmail } from 'class-validator';
 
 @Entity( { name: 'users' } )
 export class User {
-  @PrimaryGeneratedColumn( 'uuid' )
+  @PrimaryGeneratedColumn( )
   id!: number;
 
   @Column( { type: 'text', nullable: false } )
@@ -37,13 +36,9 @@ export class User {
   @IsNotEmpty( { message: 'Password can not be empty' } )
   password: string;
 
-  @Column( { type: 'boolean', default: true } )
-  active: boolean;
-
   @Column( { type: 'simple-array', default: [] } )
-  roles: string[]; // Array to store multiple roles for a user
+  roles: string[];
 
   @CreateDateColumn()
   createdAt: Date;
-
 }
