@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { VitalsService } from './vitals.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Vitals } from 'src/Entitys/Vitals.Entity';
 import { CreateVitalDtos } from './DTOs/CreateVitalDto';
 import { UpdateVitalsDto } from './DTOs/UpdateVitalsDto';
+import { Vitals } from 'src/shared/entities/Vitals.Entity';
 
 @Controller('vitals')
 @ApiTags('Vitals')
@@ -22,7 +22,7 @@ export class VitalsController {
   @Get()
   @ApiOperation({summary:'return all vitals for patients'})
   @ApiResponse({ status: 200, description: 'return all vitals patient  ' })
-  
+
   async  findAllvitalspatients() {
       const patients=await this.vitalsServices.findAllvitalspatients();
        return patients;
@@ -48,12 +48,12 @@ export class VitalsController {
       await this.vitalsServices.UpdatevitalsPatientById(ID,UpvitalDto);
       return 'vitals for patient updated successfully';
   }
-  
+
 
   @Delete(':ID')
   @ApiOperation({summary:'Delete vitals for patient  '})
   @ApiResponse({ status: 200, description: 'vitals for  patient deleted successfullly ' })
- 
+
   DeletevitalsPatientById(@Param('ID',ParseIntPipe)ID:number){
       this.vitalsServices.DeletevitalsPatientById(ID);
         return 'vitals for  patient deleted sucessfully'

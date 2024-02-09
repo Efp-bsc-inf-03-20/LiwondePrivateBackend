@@ -1,9 +1,8 @@
-import { Injectable, NotFoundException, Param, ParseIntPipe } from '@nestjs/common';
+import { Injectable,  Param, ParseIntPipe } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Backstore } from 'src/Entitys/Backstore.Entity';
 import { Repository } from 'typeorm';
 import { CreateBackstoreParams, UpdatedBackstoreParams } from './Utils/types';
-import { UpdateBackstoreDto } from './DTOs/UpdateBackstoreDtos';
+import { Backstore } from 'src/shared/entities/Backstore.Entity';
 
 @Injectable()
 export class BackstoreService {
@@ -26,10 +25,10 @@ export class BackstoreService {
       Quantity:BackstoreDetails.Quantity,
       expiryDate:BackstoreDetails.expiryDate,
       CreatedAt:new Date(),
-      
 
- 
-      
+
+
+
     });
 
     await this.BackstoreRepository.save(newbackstoredrug);
@@ -67,11 +66,11 @@ export class BackstoreService {
     }
   }
 
-    
-  
+
+
 
   async deleteBackStoreDrugById(@Param('ID',ParseIntPipe)id:number): Promise<void> {
-   
+
     await this.BackstoreRepository.delete({ ID: id });
   }
 }

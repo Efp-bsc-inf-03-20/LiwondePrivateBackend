@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Xray } from 'src/Entitys/Xray.Entity';
 import { XRayService } from './x-ray.service';
 import { UpdatedXrayDto } from './DTOs/UpdateXrayDto';
 import { CreateXrayDtos } from './DTOs/CreateXrayDto';
+import { Xray } from 'src/shared/entities/Xray.Entity';
 
 @Controller('x-ray')
 @ApiTags('Xray')
@@ -26,7 +26,7 @@ export class XRayController {
     async  findAllXrayPatients() {
         const patients=await this.XrayServices.findAllXrayPatients();
          return patients;
-  
+
       }
 
     @Get(':ID')
@@ -36,7 +36,7 @@ export class XRayController {
     async findXrayPatientById(@Param('ID') ID: number): Promise<Xray| undefined> {
       return this.XrayServices.findXrayPatientById(ID)
       }
-  
+
 
     @Put(':ID')
     @ApiOperation({summary:'update xray patient by id'})
@@ -48,12 +48,12 @@ export class XRayController {
         await this.XrayServices.UpdatexrayPatientById(ID, UpdatedxrayDto);
         return 'xray patient updated successfully';
     }
-    
+
 
     @Delete(':ID')
     @ApiOperation({summary:'Delete xray patient  '})
     @ApiResponse({ status: 200, description: 'xray patient deleted successfullly ' })
-   
+
     DeletexrayPatientById(@Param('ID',ParseIntPipe)ID:number){
         this.XrayServices.DeleteXrayPatientById(ID);
           return 'xray patient deleted sucessfully'

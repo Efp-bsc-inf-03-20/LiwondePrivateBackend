@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Xray } from 'src/Entitys/Xray.Entity';
 import { Repository } from 'typeorm';
 import { CreateXrayParams, UpdateXrayParams } from './Utils/types';
+import { Xray } from 'src/shared/entities/Xray.Entity';
 
 @Injectable()
 export class XRayService {
@@ -56,5 +56,5 @@ export class XRayService {
     async DeleteXrayPatientById(ID:number): Promise<void>{
         await this.XrayRepository.delete(ID);
       }
-  
+
 }

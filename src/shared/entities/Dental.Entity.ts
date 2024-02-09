@@ -1,5 +1,4 @@
 import { IsNotEmpty, IsString } from "class-validator";
-import { AlertInstance } from "twilio/lib/rest/monitor/v1/alert";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()

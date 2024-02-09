@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Laboratory } from 'src/Entitys/Laborotary.Entity';
 import { Repository } from 'typeorm';
 import { CreateLaborotoryParams, UpdateLaborotoryParams } from './Utils/types';
+import { Laboratory } from 'src/shared/entities/Laborotary.Entity';
 
 @Injectable()
 export class LaboratoryService {
@@ -17,7 +17,7 @@ export class LaboratoryService {
         const patient= this.LaboraotyRepository.findOne({ where: { ID: ID } });
         return patient;
     }
-   
+
   async  createLaborotoryPatient(LaborotaryDetails:CreateLaborotoryParams): Promise<void> {
     const newpatientonLaborotory=this.LaboraotyRepository.create({
         ...LaborotaryDetails,
@@ -57,7 +57,7 @@ export class LaboratoryService {
         updateObject.TestOrdered = UpdatedLaborotoryDetails.TestOrdered;
     }
 
-   
+
 
     if (Object.keys(updateObject).length > 0) {
         await this.LaboraotyRepository.update(ID, updateObject);

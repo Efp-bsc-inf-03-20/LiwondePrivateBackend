@@ -7,6 +7,8 @@ import { Roles } from '../roles.decorator';
 import { LPHStaffRole } from 'src/auth/roles.enum';
 import { AuthMiddleware } from 'src/LPH.auth.middleware';
 import { RolesGuard } from 'src/LPH.roles.guard';
+import { CreateStaffDTO } from './DTOs/CreateStaffDtos';
+import { UpdateStaffDTO } from './DTOs/UpdateStaffDtos';
 
 @Controller( 'LPHStaff' )
 @UseGuards( RolesGuard )
@@ -17,8 +19,8 @@ export class StaffController {
   @ApiResponse( { status: 200, description: 'Staff registered successfully' } )
   // @UseGuards( AuthMiddleware ) // Optional: Ensure user is logged in before role check
   // @Roles( LPHStaffRole.ADMIN ) // Only admin can register staff
-  async registerStaff( @Body() user: User, @Res() res: Response ) {
-    return this.staffService.registerStaff( user, res );
+  async registerStaff( @Body() createStaffDTO: CreateStaffDTO, @Res() res: Response ) {
+    return this.staffService.registerStaff(createStaffDTO, res );
   }
 
   @Post( '/login' )
@@ -69,8 +71,8 @@ export class StaffController {
   @ApiOperation( { summary: 'Update staff' } )
   @ApiResponse( { status: 200, description: 'Staff updated successfully' } )
   // @Roles( LPHStaffRole.ADMIN ) // Only admin can update staff
-  async updateStaffById( @Param( 'id' ) id: number, @Body() user: User ) {
-    return this.staffService.updateStaffById( +id, user );
+  async updateStaffById( @Param( 'id' ) id: number, @Body() updateStaffDTO: UpdateStaffDTO ) {
+    return this.staffService.updateStaffById( +id, updateStaffDTO );
   }
 
   @Delete( '/delete-staff/:id' )
