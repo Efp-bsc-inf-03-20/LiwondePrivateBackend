@@ -44,7 +44,9 @@ import { RolesGuard } from './LPH.roles.guard';
       database:'liwondeprivatehospital',
       password:'1234',
       url:"postgres://jhxtzhpp:Ax7lDlN81kXio7XGO4Zi_S_QC8Tj3W7d@baasu.db.elephantsql.com/jhxtzhpp",
-
+      // username: 'postgres',
+      // password: 'wtg3g5m95',
+      // database: 'liwondeprivatehospital',
       entities: [User, Reception, OPD, Pharmacy, Financial, DaySummary,Backstore,Xray,Laboratory,PhamarcySales,Dental,Vitals],
       synchronize: true,
     }),
