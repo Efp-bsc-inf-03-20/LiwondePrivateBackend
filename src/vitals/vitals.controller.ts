@@ -5,6 +5,7 @@ import { Vitals } from 'src/Entitys/Vitals.Entity';
 import { CreateVitalDtos } from './DTOs/CreateVitalDto';
 import { UpdateVitalsDto } from './DTOs/UpdateVitalsDto';
 
+
 @Controller('vitals')
 @ApiTags('Vitals')
 export class VitalsController {
@@ -29,14 +30,25 @@ export class VitalsController {
 
     }
 
-  @Get(':ID')
-  @ApiOperation({summary:'get a vital for patient  '})
-  @ApiResponse({ status: 200, description: 'an xray patient returned successfullly ' })
-
-  async findvitalspatientById(@Param('ID') ID: number): Promise<Vitals| undefined> {
-    return this.vitalsServices.findvitalspatientById(ID)
+   
+    @Get(':name')
+    @ApiOperation({ summary: 'Search  patient in vitals by name' })
+    @ApiResponse({ status: 200, description: ' patient in vitals found successfully' })
+    async findvitalspatientByName(@Param('name') name: string): Promise<Vitals[] | string> {
+      if (!name) {
+        return 'Name is not provided';
+      }
+    
+      const results = await this.vitalsServices.findvitalspatientByName(name);
+    
+      if (results.length === 0) {
+        return 'Name not found';
+      }
+    
+      return results;
     }
-
+  
+ 
 
   @Put(':ID')
   @ApiOperation({summary:'update vitals  patient by id'})

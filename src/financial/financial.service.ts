@@ -13,11 +13,20 @@ export class FinancialService {
         return this.FinancialRepository.find();
     }
 
-    async findFinancialatientById(id: number): Promise<Financial | undefined> {
-      const patient= this.FinancialRepository.findOne({ where: { id: id } });
-      return patient;
-  }
-
+    async findfinancialpatientByName(FirstName?: string, LastName?: string): Promise<Financial[]> {
+        const queryBuilder = this.FinancialRepository.createQueryBuilder('financialpatient');
+    
+        if (FirstName && LastName) {
+          queryBuilder.where('financialpatient.FirstName = :FirstName AND financialpatient.LastName = :LastName', { FirstName, LastName });
+        } else if (FirstName) {
+          queryBuilder.where('financialpatient.FirstName = :FirstName', { FirstName });
+        } else if (LastName) {
+          queryBuilder.where('financialpatient.LastName = :LastName', { LastName });
+        }
+    
+        return queryBuilder.getMany();
+      }
+    
   
   
   async  createFinancialPatient(FinancialDetails:createFinanceParams): Promise<void> {

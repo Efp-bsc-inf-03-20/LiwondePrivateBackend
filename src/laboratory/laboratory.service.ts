@@ -13,11 +13,20 @@ export class LaboratoryService {
         return this.LaboraotyRepository.find();
     }
 
-    async findLaborotoryPatientById(ID: number): Promise<Laboratory| undefined> {
-        const patient= this.LaboraotyRepository.findOne({ where: { ID: ID } });
-        return patient;
+    async findLaborotorypatientByName(FirstName?: string, LastName?: string): Promise<Laboratory[]> {
+      const queryBuilder = this.LaboraotyRepository.createQueryBuilder('Laborotorypatient');
+  
+      if (FirstName && LastName) {
+        queryBuilder.where('Laborotorypatient.FirstName = :FirstName AND Laborotorypatient.LastName = :LastName', { FirstName, LastName });
+      } else if (FirstName) {
+        queryBuilder.where('Laborotorypatient.FirstName = :FirstName', { FirstName });
+      } else if (LastName) {
+        queryBuilder.where('Laborotorypatient.LastName = :LastName', { LastName });
+      }
+  
+      return queryBuilder.getMany();
     }
-   
+  
   async  createLaborotoryPatient(LaborotaryDetails:CreateLaborotoryParams): Promise<void> {
     const newpatientonLaborotory=this.LaboraotyRepository.create({
         ...LaborotaryDetails,

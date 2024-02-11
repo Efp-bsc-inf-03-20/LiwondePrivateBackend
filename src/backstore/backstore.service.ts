@@ -13,11 +13,21 @@ export class BackstoreService {
     return this.BackstoreRepository.find();
   }
 
-  async getbackstoreDrugById(id: number): Promise<Backstore | undefined> {
-    const backstoredrug = await this.BackstoreRepository.findOne({ where: { ID: id } });
+  async findbackstoreDrugByName(DrugName?: string, DrugType?: string): Promise<Backstore[]> {
+    const queryBuilder = this.BackstoreRepository.createQueryBuilder('backstoredrug');
 
-    return backstoredrug;
+    if (DrugName && DrugType) {
+      queryBuilder.where('backstoredrug.DrugName = DrugName AND backstoredrug.DrugType = :DrugType', { DrugName, DrugType });
+    } else if (DrugName) {
+      queryBuilder.where('backstoredrug.DrugName = :DrugName', { DrugName });
+    } else if (DrugType) {
+      queryBuilder.where('backstoredrug.DrugType = :DrugType', { DrugType});
+    }
+
+    return queryBuilder.getMany();
   }
+
+
 
   async createBackStoreDrug(BackstoreDetails: CreateBackstoreParams): Promise<void> {
     const newbackstoredrug = this.BackstoreRepository.create({

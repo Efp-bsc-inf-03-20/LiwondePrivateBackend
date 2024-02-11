@@ -29,14 +29,23 @@ export class XRayController {
   
       }
 
-    @Get(':ID')
-    @ApiOperation({summary:'get an xray patient  '})
-    @ApiResponse({ status: 200, description: 'an xray patient returned successfullly ' })
-
-    async findXrayPatientById(@Param('ID') ID: number): Promise<Xray| undefined> {
-      return this.XrayServices.findXrayPatientById(ID)
+      @Get(':name')
+      @ApiOperation({ summary: 'Search xray patient by name' })
+      @ApiResponse({ status: 200, description: 'xray patient found successfully' })
+      async findxraypatientByName(@Param('name') name: string): Promise<Xray[] | string> {
+        if (!name) {
+          return 'Name is not provided';
+        }
+      
+        const results = await this.XrayServices.findxraypatientByName(name);
+      
+        if (results.length === 0) {
+          return 'Name not found';
+        }
+      
+        return results;
       }
-  
+    
 
     @Put(':ID')
     @ApiOperation({summary:'update xray patient by id'})

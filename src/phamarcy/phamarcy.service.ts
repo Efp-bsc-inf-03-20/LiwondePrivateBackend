@@ -14,9 +14,19 @@ export class PhamarcyServices{
       return this.PhamarcyRepository.find();
   }
 
-    async findPhamarcyDrugById(ID: number): Promise<Pharmacy| undefined> {
-      const drug= this.PhamarcyRepository.findOne({ where: { DrugID: ID } });
-      return drug;
+   
+  async findbackstoreDrugByName(DrugName?: string, DrugType?: string): Promise<Pharmacy[]> {
+    const queryBuilder = this.PhamarcyRepository.createQueryBuilder('phamarcydrug');
+
+    if (DrugName && DrugType) {
+      queryBuilder.where('phamarcydrug.DrugName = DrugName AND phamarcydrug.DrugType = :DrugType', { DrugName, DrugType });
+    } else if (DrugName) {
+      queryBuilder.where('phamarcydrug.DrugName = :DrugName', { DrugName });
+    } else if (DrugType) {
+      queryBuilder.where('phamarcydrug.DrugType = :DrugType', { DrugType});
+    }
+
+    return queryBuilder.getMany();
   }
 
 

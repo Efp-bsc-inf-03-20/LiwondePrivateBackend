@@ -12,13 +12,24 @@ export class DentalService {
         return this.DentalRepository.find();
     }
 
-    async findDentalPatientById(ID: number): Promise<Dental | undefined> {
-      const patient= this.DentalRepository.findOne({ where: { ID: ID } });
-      return patient;
-  }
+    async  findDentalpatientByName(FirstName?: string, LastName?: string): Promise<Dental[]> {
+        const queryBuilder = this.DentalRepository.createQueryBuilder('Dentalpatient');
+    
+        if (FirstName && LastName) {
+          queryBuilder.where('Dentalpatient.FirstName = :FirstName AND Dentalpatient.LastName = :LastName', { FirstName, LastName });
+        } else if (FirstName) {
+          queryBuilder.where('Dentalpatient.FirstName = :FirstName', { FirstName });
+        } else if (LastName) {
+          queryBuilder.where('Dentalpatient.LastName = :LastName', { LastName });
+        }
+    
+        return queryBuilder.getMany();
+      }
+    
    
   async createDentalPatient(DentalDetails: createDentalParams): Promise<void> {
     if (DentalDetails.Amount !== null && DentalDetails.MedicalScheme !== null) {
+        //giving problems here
         throw new Error("Amount and MedicalScheme cannot be entered at once.");
     }
 

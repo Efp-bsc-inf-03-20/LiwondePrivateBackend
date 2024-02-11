@@ -12,11 +12,20 @@ export class VitalsService {
         return this.vitalsRepository.find();
     }
 
-    async findvitalspatientById(ID: number): Promise<Vitals | undefined> {
-      const patient= this.vitalsRepository.findOne({ where: { ID: ID} });
-      return patient;
-  }
-
+   
+    async findvitalspatientByName(FirstName?: string, LastName?: string): Promise<Vitals[]> {
+        const queryBuilder = this.vitalsRepository.createQueryBuilder('vitalspatient');
+    
+        if (FirstName && LastName) {
+          queryBuilder.where('vitalspatient.FirstName = :FirstName AND vitalspatient.LastName = :LastName', { FirstName, LastName });
+        } else if (FirstName) {
+          queryBuilder.where('vitalspatient.FirstName = :FirstName', { FirstName });
+        } else if (LastName) {
+          queryBuilder.where('vitalspatient.LastName = :LastName', { LastName });
+        }
+    
+        return queryBuilder.getMany();
+      }
   
   
   async  createvitalslPatient(vitalsDetails:CreateVitalsParams): Promise<void> {

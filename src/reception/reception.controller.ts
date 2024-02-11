@@ -32,12 +32,24 @@ export class ReceptionController {
 
     }
 
-    @Get(':ID')
+    @Get(':name')
     @ApiOperation({summary:'get an reception patient'})
     @ApiResponse({ status: 200, description: 'return a certain reception patient ' })
-    async getReceptionPatientById(@Param('ID') ID: number): Promise<Reception| undefined> {
-      return this.ReceptionServices.findReceptionPatientById(ID);
+    async findReceptionpatientByName(@Param('name') name: string): Promise<Reception[] | string> {
+      if (!name) {
+        return 'Name is not provided';
+      }
+    
+      const results = await this.ReceptionServices.findReceptionpatientByName(name);
+    
+      if (results.length === 0) {
+        return 'Name not found';
+      }
+    
+      return results;
     }
+  
+ 
 
     @Put(':ID')
     @ApiOperation({summary:' reception patient updated successfully'})

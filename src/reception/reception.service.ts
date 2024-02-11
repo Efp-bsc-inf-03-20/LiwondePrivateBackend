@@ -13,10 +13,19 @@ export class ReceptionService{
       return this.ReceptionRepository.find();
   }
 
-  async findReceptionPatientById(ID: number): Promise<Reception | undefined> {
-    const patient= this.ReceptionRepository.findOne({ where: { ID: ID } });
-    return patient;
-}
+  async findReceptionpatientByName(FirstName?: string, LastName?: string): Promise<Reception[]> {
+    const queryBuilder = this.ReceptionRepository.createQueryBuilder('Receptionpatient');
+
+    if (FirstName && LastName) {
+      queryBuilder.where('Receptionpatient.FirstName = :FirstName AND Receptionpatient.LastName = :LastName', { FirstName, LastName });
+    } else if (FirstName) {
+      queryBuilder.where('Receptionpatient.FirstName = :FirstName', { FirstName });
+    } else if (LastName) {
+      queryBuilder.where('Receptionpatient.LastName = :LastName', { LastName });
+    }
+
+    return queryBuilder.getMany();
+  }
 
 
 async createReception(ReceptionDetails:createReceptionParams): Promise<void> {

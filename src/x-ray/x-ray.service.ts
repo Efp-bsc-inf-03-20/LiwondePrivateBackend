@@ -24,10 +24,20 @@ export class XRayService {
         return this.XrayRepository.find();
     }
 
-    async findXrayPatientById(ID: number): Promise<Xray | undefined> {
-        const patient = await this.XrayRepository.findOne({ where: { ID: ID } });
-        return patient;
-    }
+    async findxraypatientByName(FirstName?: string, LastName?: string): Promise<Xray[]> {
+        const queryBuilder = this.XrayRepository.createQueryBuilder('xraypatient');
+    
+        if (FirstName && LastName) {
+          queryBuilder.where('xraypatient.FirstName = :FirstName AND xraypatient.LastName = :LastName', { FirstName, LastName });
+        } else if (FirstName) {
+          queryBuilder.where('xraypatient.FirstName = :FirstName', { FirstName });
+        } else if (LastName) {
+          queryBuilder.where('xraypatient.LastName = :LastName', { LastName });
+        }
+    
+        return queryBuilder.getMany();
+      }
+  
 
     async UpdatexrayPatientById(ID: number, UpdatexrayDetails: UpdateXrayParams): Promise<void> {
         const updateObject: Partial<Xray> = {};

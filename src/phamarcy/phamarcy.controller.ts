@@ -20,12 +20,22 @@ export class PhamarcyController {
       return 'phamarcy drug created sucessfully';
 
   }
-  @Get(':DrugID')
+  @Get(':DrugName')
   @ApiOperation({summary:'get a drug in phamarcy  '})
   @ApiResponse({ status: 200, description: 'a phamarcy drug returned successfullly ' })
-  async findPhamarcyDrugByI(@Param('DrugID') DrugID: number): Promise<Pharmacy| undefined> {
-      return this.PhamarcyServices.findPhamarcyDrugById(DrugID);
+  async findphamarcyDrugByName(@Param('DrugName') DrugName: string): Promise<Pharmacy[] | string> {
+    if (!DrugName) {
+      return 'DrugName is not provided';
     }
+  
+    const results = await this.PhamarcyServices.findbackstoreDrugByName(DrugName);
+  
+    if (results.length === 0) {
+      return 'DrugName not found';
+    }
+  
+    return results;
+  }
 
   
     @Get()
@@ -38,8 +48,8 @@ export class PhamarcyController {
 
 
   }
-  //not working
-    @Put()
+  
+    @Put(':DrugID')
     @ApiOperation({summary:' phamarcy Drug updated succesfull' })
     @ApiResponse({ status: 200, description: 'phamarcy drug updated sucessfully ' })
      
@@ -49,8 +59,8 @@ export class PhamarcyController {
         return 'phamarcy drug updated sucessfully'
     }
 
-    //not working
-    @Delete()
+    
+    @Delete(':DrugID')
     @ApiOperation({summary:' phamarcy Drug deleted sucessfully'})
     @ApiResponse({ status: 200, description: 'phamarcy drug deleted Successfully ' })
 

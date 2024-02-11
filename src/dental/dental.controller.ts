@@ -37,13 +37,23 @@ export class DentalController {
         return patients;
   
       }
-    @Get(':ID')
+    @Get(':name')
     @ApiOperation({summary:'get an Dental patient  '})
     @ApiResponse({ status: 200, description: 'a Dental patient returned successfullly ' })
-    async findDentalPatientById(@Param('ID') ID: number): Promise<Dental| undefined> {
-        return this.DentalServices.findDentalPatientById(ID);
+    async findDentalpatientByName(@Param('name') name: string): Promise<Dental[] | string> {
+        if (!name) {
+          return 'Name is not provided';
+        }
+      
+        const results = await this.DentalServices.findDentalpatientByName(name);
+      
+        if (results.length === 0) {
+          return 'Name not found';
+        }
+      
+        return results;
       }
-  
+    
   
     @Put(':ID')
     @ApiOperation({summary:'update Dental patient by id'})

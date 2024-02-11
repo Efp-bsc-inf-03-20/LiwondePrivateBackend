@@ -30,13 +30,23 @@ export class FinancialController {
       return patients;
 
     }
-    @Get(':ID')
+    @Get(':name')
     @ApiOperation({summary:'get an finance patient'})
-    @ApiResponse({ status: 200, description: 'return a certain opd patient ' })
-    async getFinancialPatientById(@Param('id') id: number): Promise<Financial| undefined> {
-      return this.FinancialServices.findFinancialatientById(id);
+    @ApiResponse({ status: 200, description: 'return a certain financial patient ' })
+    async findfinancialpatientByName(@Param('name') name: string): Promise<Financial[] | string> {
+      if (!name) {
+        return 'Name is not provided';
+      }
+    
+      const results = await this.FinancialServices.findfinancialpatientByName(name);
+    
+      if (results.length === 0) {
+        return 'Name not found';
+      }
+    
+      return results;
     }
-
+  
 
     @Put(':id')
     @ApiOperation({summary:' financial patient updated successfully'})

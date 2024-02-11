@@ -28,13 +28,23 @@ export class BackstoreController {
 
     }
   
-    @Get(':ID')
+    @Get(':DrugName')
     @ApiOperation({summary:'get a backstore drug '})
     @ApiResponse({ status: 200, description: 'return a certain drug in backstore ' })
-    async getbackstoreDrugById(@Param('ID') id: number): Promise<Backstore| undefined> {
-      return this.BackstoreServices.getbackstoreDrugById(id);
+    async findfinancialpatientByName(@Param('DrugName') DrugName: string): Promise<Backstore[] | string> {
+      if (!DrugName) {
+        return 'DrugName is not provided';
+      }
+    
+      const results = await this.BackstoreServices.findbackstoreDrugByName(DrugName);
+    
+      if (results.length === 0) {
+        return 'DrugName not found';
+      }
+    
+      return results;
     }
-
+  
     @Put(':ID')
     @ApiOperation({summary:'update backstore Drug'})
     @ApiResponse({ status: 200, description: 'backstore drug updated   Successfully ' })

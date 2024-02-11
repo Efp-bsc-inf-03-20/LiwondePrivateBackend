@@ -29,10 +29,8 @@ export class OpdController {
     }
 
 
-      this.OpdServices.CreateOPDPatient(CreateOpdDto)
-      return 'patient registered sucessfully';
-    }
-  
+  }
+
     @Get()
     @ApiOperation({summary:'get all opd patients'})
     @ApiResponse({ status: 200, description: 'return all opd patients ' })
@@ -41,12 +39,23 @@ export class OpdController {
       return patients;
 
     }
-    @Get(':ID')
+    @Get(':name')
     @ApiOperation({summary:'get an opd patient'})
     @ApiResponse({ status: 200, description: 'return a certain opd patient ' })
-    async getOPDPatientById(@Param('ID') ID: number): Promise<OPD| undefined> {
-      return this.OpdServices.findOPDPatientById(ID);
+    async findOPDpatientByName(@Param('name') name: string): Promise<OPD[] | string> {
+      if (!name) {
+        return 'Name is not provided';
+      }
+    
+      const results = await this.OpdServices.findOPDpatientByName(name);
+    
+      if (results.length === 0) {
+        return 'Name not found';
+      }
+    
+      return results;
     }
+  
 
 
     

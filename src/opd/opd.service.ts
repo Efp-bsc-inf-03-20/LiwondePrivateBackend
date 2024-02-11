@@ -12,13 +12,23 @@ export class OpdService {
         return this.OPDRepository.find();
     }
 
-    async findOPDPatientById(ID: number): Promise<OPD | undefined> {
-        const patient= this.OPDRepository.findOne({ where: { ID: ID } });
-        return patient;
-    }
-
+    async findOPDpatientByName(FirstName?: string, LastName?: string): Promise<OPD[]> {
+        const queryBuilder = this.OPDRepository.createQueryBuilder('opdpatient');
+    
+        if (FirstName && LastName) {
+          queryBuilder.where('opdpatient.FirstName = :FirstName AND opdpatient.LastName = :LastName', { FirstName, LastName });
+        } else if (FirstName) {
+          queryBuilder.where('opdpatient.FirstName = :FirstName', { FirstName });
+        } else if (LastName) {
+          queryBuilder.where('opdpatient.LastName = :LastName', { LastName });
+        }
+    
+        return queryBuilder.getMany();
+      }
+    
     async CreateOPDPatient(OpdDetails: createOpdParams): Promise<void> {  
          if (OpdDetails.Amount !== null && OpdDetails.MedicalScheme !== null) {
+            //giving problems here when you insert amount even if you leave medical scheme blank
         throw new Error("Amount and MedicalScheme cannot be entered at once.");
     }
 
