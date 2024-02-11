@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Xray } from 'src/Entitys/Xray.Entity';
-import { Repository } from 'typeorm';
+import { Repository, ILike } from 'typeorm';
 import { CreateXrayParams, UpdateXrayParams } from './Utils/types';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class XRayService {
             LastName: XrayDetails.LastName,
             Treatment: XrayDetails.Treatment,
             Amount: XrayDetails.Amount.toString(),
-            Date:new Date()
+            Date: new Date()
         });
 
         return this.XrayRepository.save(newpatientonxray);
@@ -26,18 +26,17 @@ export class XRayService {
 
     async findxraypatientByName(FirstName?: string, LastName?: string): Promise<Xray[]> {
         const queryBuilder = this.XrayRepository.createQueryBuilder('xraypatient');
-    
+
         if (FirstName && LastName) {
-          queryBuilder.where('xraypatient.FirstName = :FirstName AND xraypatient.LastName = :LastName', { FirstName, LastName });
+            queryBuilder.where('LOWER(xraypatient.FirstName || xraypatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}${LastName}%` });
         } else if (FirstName) {
-          queryBuilder.where('xraypatient.FirstName = :FirstName', { FirstName });
+            queryBuilder.where('LOWER(xraypatient.FirstName || xraypatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}%` });
         } else if (LastName) {
-          queryBuilder.where('xraypatient.LastName = :LastName', { LastName });
+            queryBuilder.where('LOWER(xraypatient.FirstName || xraypatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${LastName}%` });
         }
-    
+
         return queryBuilder.getMany();
-      }
-  
+    }
 
     async UpdatexrayPatientById(ID: number, UpdatexrayDetails: UpdateXrayParams): Promise<void> {
         const updateObject: Partial<Xray> = {};
@@ -65,6 +64,5 @@ export class XRayService {
 
     async DeleteXrayPatientById(ID:number): Promise<void>{
         await this.XrayRepository.delete(ID);
-      }
-  
+    }
 }

@@ -13,27 +13,26 @@ export class OpdService {
     }
 
     async findOPDpatientByName(FirstName?: string, LastName?: string): Promise<OPD[]> {
-        const queryBuilder = this.OPDRepository.createQueryBuilder('opdpatient');
+        const queryBuilder = this.OPDRepository.createQueryBuilder('opdpatients');
     
         if (FirstName && LastName) {
-          queryBuilder.where('opdpatient.FirstName = :FirstName AND opdpatient.LastName = :LastName', { FirstName, LastName });
+            queryBuilder.where('LOWER(opdpatients.FirstName || opdpatients.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}${LastName}%` });
         } else if (FirstName) {
-          queryBuilder.where('opdpatient.FirstName = :FirstName', { FirstName });
+            queryBuilder.where('LOWER(opdpatients.FirstName || opdpatients.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}%` });
         } else if (LastName) {
-          queryBuilder.where('opdpatient.LastName = :LastName', { LastName });
+            queryBuilder.where('LOWER(opdpatients.FirstName || opdpatients.LastName) LIKE LOWER(:FullName)', { FullName: `%${LastName}%` });
         }
     
         return queryBuilder.getMany();
-      }
-    
-    async CreateOPDPatient(OpdDetails: createOpdParams): Promise<void> {  
-         if (OpdDetails.Amount !== null && OpdDetails.MedicalScheme !== null) {
-            //giving problems here when you insert amount even if you leave medical scheme blank
-        throw new Error("Amount and MedicalScheme cannot be entered at once.");
     }
+  
+  
+    async CreateOPDPatient(OpdDetails: createOpdParams): Promise<void> {  
+        //if (OpdDetails.Amount !== null && OpdDetails.MedicalScheme !== null) {
+         //   throw new Error("Amount and MedicalScheme cannot be entered at once.");
+        //}
 
         const newOPDPatient = this.OPDRepository.create({
-            
             FirstName: OpdDetails.FirstName,
             LastName: OpdDetails.LastName,
             Treatment: OpdDetails.Treatment,

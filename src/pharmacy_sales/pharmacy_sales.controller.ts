@@ -17,7 +17,7 @@ export class PharmacySalesController {
     @ApiOperation({summary:'patient in phamrcysales created '})
     @ApiResponse({ status: 200, description: 'patient in phamarcysales created successfullly ' })
     createPatientinphamarcysales(@Body() CreatesalesDto:CreatePhamarcysalesDTO): string {
-      this.PhamarcysalesServices.createPatientinphamarcysales(CreatesalesDto)
+      this.PhamarcysalesServices.createPatientInPhamarcySales(CreatesalesDto)
       return '  patient registered sucessfully in phamarcysales';
     }  
 
@@ -26,7 +26,7 @@ export class PharmacySalesController {
     @ApiResponse({ status: 200, description: 'return all patients in phamarcysales ' })
     
     async  findAllphamarcysalespatients() {
-        const patients=await this.PhamarcysalesServices.findAllphamarcysalespatients();
+        const patients=await this.PhamarcysalesServices.findAllPhamarcySalesPatients();
          return patients;
   
       }
@@ -51,7 +51,7 @@ export class PharmacySalesController {
     @ApiOperation({ summary: 'update a patient by id in phamarcysales ' })
     @ApiResponse({ status: 200, description: ' patient in phamarcysales updated successfully' })
     async  UpdatephamarcysalesPatientById(@Param('ID', ParseIntPipe) ID: number, @Body() UpphamarcysalesDto: UpdatedPhamarcySalesDTO) {
-        await this.PhamarcysalesServices.UpdatephamarcysalesPatientById(ID,UpphamarcysalesDto);
+        await this.PhamarcysalesServices.updatePhamarcySalesPatientById(ID,UpphamarcysalesDto);
         return 'vitals for patient updated successfully';
     }
     
@@ -61,7 +61,7 @@ export class PharmacySalesController {
     @ApiResponse({ status: 200, description: 'vitals for  patient deleted successfullly ' })
    
     DeletephamarcysalesPatientById(@Param('ID',ParseIntPipe)ID:number){
-        this.PhamarcysalesServices.DeletephamarcysalesPatientById(ID);
+        this.PhamarcysalesServices.deletePhamarcySalesPatientById(ID);
           return '  patient deleted sucessfully in phamarcysales'
       }
   

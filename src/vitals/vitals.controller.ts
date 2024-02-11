@@ -16,7 +16,7 @@ export class VitalsController {
   @ApiOperation({summary:'vitals for patient created '})
   @ApiResponse({ status: 200, description: 'vitals for  patient created successfullly ' })
   createvitalslPatient(@Body() CreatevitalsDto:CreateVitalDtos): string {
-      this.vitalsServices.createvitalslPatient(CreatevitalsDto)
+      this.vitalsServices.createVitalsPatient(CreatevitalsDto)
       return 'vitals for  patient registered sucessfully';
     }
 
@@ -25,7 +25,7 @@ export class VitalsController {
   @ApiResponse({ status: 200, description: 'return all vitals patient  ' })
   
   async  findAllvitalspatients() {
-      const patients=await this.vitalsServices.findAllvitalspatients();
+      const patients=await this.vitalsServices.findAllVitalsPatients();
        return patients;
 
     }
@@ -39,7 +39,7 @@ export class VitalsController {
         return 'Name is not provided';
       }
     
-      const results = await this.vitalsServices.findvitalspatientByName(name);
+      const results = await this.vitalsServices.findVitalsPatientByName(name);
     
       if (results.length === 0) {
         return 'Name not found';
@@ -57,7 +57,7 @@ export class VitalsController {
   @ApiOperation({ summary: 'update vitals patient by id' })
   @ApiResponse({ status: 200, description: 'vitals for  patient updated successfully' })
   async UpdatevitalsPatientById(@Param('ID', ParseIntPipe) ID: number, @Body() UpvitalDto: UpdateVitalsDto) {
-      await this.vitalsServices.UpdatevitalsPatientById(ID,UpvitalDto);
+      await this.vitalsServices.updateVitalsPatientById(ID,UpvitalDto);
       return 'vitals for patient updated successfully';
   }
   
@@ -67,7 +67,7 @@ export class VitalsController {
   @ApiResponse({ status: 200, description: 'vitals for  patient deleted successfullly ' })
  
   DeletevitalsPatientById(@Param('ID',ParseIntPipe)ID:number){
-      this.vitalsServices.DeletevitalsPatientById(ID);
+      this.vitalsServices.deleteVitalsPatientById(ID);
         return 'vitals for  patient deleted sucessfully'
     }
 

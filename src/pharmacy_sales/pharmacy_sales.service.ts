@@ -1,90 +1,85 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PhamarcySales } from 'src/Entitys/PhamarcySales.Entity';
-import { CreatePhamarcyParams, UpdatedPhamarcyParams } from 'src/phamarcy/DTOs/Utils/types';
 import { Repository } from 'typeorm';
-import { CreatePhamarcysalesParams, UpdatedPhamarcySalesParams, getphamarcysalesparams } from './DTOs/utils/types';
+import { CreatePhamarcysalesParams, UpdatedPhamarcySalesParams } from './DTOs/utils/types';
+import { Vitals } from 'src/Entitys/Vitals.Entity';
+
 @Injectable()
 export class PharmacySalesService {
     constructor(@InjectRepository(PhamarcySales) private phamarcysalesRepository: Repository<PhamarcySales>){ }
 
-    async  findAllphamarcysalespatients(): Promise<PhamarcySales[]>{
+    async findAllPhamarcySalesPatients(): Promise<PhamarcySales[]> {
         return this.phamarcysalesRepository.find();
     }
-
     async findPharmacySalesByName(FirstName?: string, LastName?: string): Promise<PhamarcySales[]> {
-        const queryBuilder = this.phamarcysalesRepository.createQueryBuilder('pharmacySales');
-    
-        if (FirstName && LastName) {
-          queryBuilder.where('pharmacySales.FirstName = :FirstName AND pharmacySales.LastName = :LastName', { FirstName, LastName });
-        } else if (FirstName) {
-          queryBuilder.where('pharmacySales.FirstName = :FirstName', { FirstName });
-        } else if (LastName) {
-          queryBuilder.where('pharmacySales.LastName = :LastName', { LastName });
-        }
-    
-        return queryBuilder.getMany();
+      const queryBuilder = this.phamarcysalesRepository.createQueryBuilder('pharmacySales');
+  
+      if (FirstName && LastName) {
+          queryBuilder.where('LOWER(pharmacySales.FirstName || pharmacySales.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}${LastName}%` });
+      } else if (FirstName) {
+          queryBuilder.where('LOWER(pharmacySales.FirstName || pharmacySales.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}%` });
+      } else if (LastName) {
+          queryBuilder.where('LOWER(pharmacySales.FirstName || pharmacySales.LastName) LIKE LOWER(:FullName)', { FullName: `%${LastName}%` });
       }
   
-  async  createPatientinphamarcysales(phamarcysalesDetails:CreatePhamarcysalesParams): Promise<void> {
-    const newpatientonvitals=this.phamarcysalesRepository.create({
-        ...phamarcysalesDetails,
-        
-        Date:new Date(),
+      return queryBuilder.getMany();
+  }
 
-    })
-    await this.phamarcysalesRepository.save(newpatientonvitals);
-}
 
   
+
+    async createPatientInPhamarcySales(phamarcysalesDetails: CreatePhamarcysalesParams): Promise<void> {
+        const newPatientOnVitals = this.phamarcysalesRepository.create({
+            ...phamarcysalesDetails,
+            Date: new Date(),
+        });
+
+        await this.phamarcysalesRepository.save(newPatientOnVitals);
+    }
+
     async countPatients(): Promise<number> {
-        const count = await this.phamarcysalesRepository.count();
-        return count;
-      }
-  
-  
-      async countPatientsWithMessage(): Promise<string> {
+        return this.phamarcysalesRepository.count();
+    }
+
+    async countPatientsWithMessage(): Promise<string> {
         const count = await this.countPatients();
-        return `This is the number of sales in phamarcy today: ${count}`;
-      }
-  
-      async UpdatephamarcysalesPatientById(id: number, UpdatedphamarcysalesDetails: UpdatedPhamarcySalesParams): Promise<void> {
+        return `This is the number of sales in pharmacy today: ${count}`;
+    }
+
+    async updatePhamarcySalesPatientById(id: number, updatedPhamarcysalesDetails: UpdatedPhamarcySalesParams): Promise<void> {
         const updateObject: Partial<UpdatedPhamarcySalesParams> = {};
 
-        if (UpdatedphamarcysalesDetails.FirstName !== undefined) {
-            updateObject.FirstName = UpdatedphamarcysalesDetails.FirstName;
-        }
-  
-        if (UpdatedphamarcysalesDetails.LastName !== undefined) {
-            updateObject.LastName = UpdatedphamarcysalesDetails.LastName;
-        }
-  
-        if (UpdatedphamarcysalesDetails.DrugName !== undefined) {
-            updateObject.DrugName = UpdatedphamarcysalesDetails.DrugName;
-        }
-  
-        if (UpdatedphamarcysalesDetails.DrugType !== undefined) {
-            updateObject.DrugType= UpdatedphamarcysalesDetails.DrugType;
+        if (updatedPhamarcysalesDetails.FirstName !== undefined) {
+            updateObject.FirstName = updatedPhamarcysalesDetails.FirstName;
         }
 
-        if (UpdatedphamarcysalesDetails.Amount !== undefined) {
-            updateObject.Amount = UpdatedphamarcysalesDetails.Amount;
+        if (updatedPhamarcysalesDetails.LastName !== undefined) {
+            updateObject.LastName = updatedPhamarcysalesDetails.LastName;
         }
 
-
-        if (UpdatedphamarcysalesDetails.MedicalScheme !== undefined) {
-            updateObject.MedicalScheme= UpdatedphamarcysalesDetails.MedicalScheme;
+        if (updatedPhamarcysalesDetails.DrugName !== undefined) {
+            updateObject.DrugName = updatedPhamarcysalesDetails.DrugName;
         }
-  
-  
-  
+
+        if (updatedPhamarcysalesDetails.DrugType !== undefined) {
+            updateObject.DrugType = updatedPhamarcysalesDetails.DrugType;
+        }
+
+        if (updatedPhamarcysalesDetails.Amount !== undefined) {
+            updateObject.Amount = updatedPhamarcysalesDetails.Amount;
+        }
+
+        if (updatedPhamarcysalesDetails.MedicalScheme !== undefined) {
+            updateObject.MedicalScheme = updatedPhamarcysalesDetails.MedicalScheme;
+        }
+
         if (Object.keys(updateObject).length > 0) {
             await this.phamarcysalesRepository.update(id, updateObject);
         }
-    
-
     }
-     async DeletephamarcysalesPatientById(id:number): Promise<void>{
+
+    async deletePhamarcySalesPatientById(id: number): Promise<void> {
         await this.phamarcysalesRepository.delete(id);
-      }
+    }
 }

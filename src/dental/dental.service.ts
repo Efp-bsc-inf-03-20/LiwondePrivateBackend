@@ -12,26 +12,26 @@ export class DentalService {
         return this.DentalRepository.find();
     }
 
-    async  findDentalpatientByName(FirstName?: string, LastName?: string): Promise<Dental[]> {
+    async findDentalpatientByName(FirstName?: string, LastName?: string): Promise<Dental[]> {
         const queryBuilder = this.DentalRepository.createQueryBuilder('Dentalpatient');
     
         if (FirstName && LastName) {
-          queryBuilder.where('Dentalpatient.FirstName = :FirstName AND Dentalpatient.LastName = :LastName', { FirstName, LastName });
+            queryBuilder.where('LOWER(Dentalpatient.FirstName || Dentalpatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}${LastName}%` });
         } else if (FirstName) {
-          queryBuilder.where('Dentalpatient.FirstName = :FirstName', { FirstName });
+            queryBuilder.where('LOWER(Dentalpatient.FirstName || Dentalpatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}%` });
         } else if (LastName) {
-          queryBuilder.where('Dentalpatient.LastName = :LastName', { LastName });
+            queryBuilder.where('LOWER(Dentalpatient.FirstName || Dentalpatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${LastName}%` });
         }
     
         return queryBuilder.getMany();
-      }
-    
+    }
+
    
   async createDentalPatient(DentalDetails: createDentalParams): Promise<void> {
-    if (DentalDetails.Amount !== null && DentalDetails.MedicalScheme !== null) {
+    //if (DentalDetails.Amount !== null && DentalDetails.MedicalScheme !== null) {
         //giving problems here
-        throw new Error("Amount and MedicalScheme cannot be entered at once.");
-    }
+        //throw new Error("Amount and MedicalScheme cannot be entered at once.");
+    //}
 
     const newpatientonDental = this.DentalRepository.create({
         ...DentalDetails,
@@ -54,6 +54,8 @@ export class DentalService {
         const count = await this.countPatients();
         return `This is the number of patients in dental: ${count}`;
       }
+
+      
       async UpdateDentalPatientById(ID: number, UpdatedDentalDetails: UpdatedDentalParams): Promise<void> {
         const updateObject: Partial<UpdatedDentalParams> = {};
 

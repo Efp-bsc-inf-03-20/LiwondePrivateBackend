@@ -13,20 +13,20 @@ export class ReceptionService{
       return this.ReceptionRepository.find();
   }
 
+ 
   async findReceptionpatientByName(FirstName?: string, LastName?: string): Promise<Reception[]> {
-    const queryBuilder = this.ReceptionRepository.createQueryBuilder('Receptionpatient');
+    const queryBuilder = this.ReceptionRepository.createQueryBuilder('Receptionpatients');
 
     if (FirstName && LastName) {
-      queryBuilder.where('Receptionpatient.FirstName = :FirstName AND Receptionpatient.LastName = :LastName', { FirstName, LastName });
+        queryBuilder.where('LOWER(Receptionpatients.FirstName || Receptionpatients.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}${LastName}%` });
     } else if (FirstName) {
-      queryBuilder.where('Receptionpatient.FirstName = :FirstName', { FirstName });
+        queryBuilder.where('LOWER(Receptionpatients.FirstName || Receptionpatients.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}%` });
     } else if (LastName) {
-      queryBuilder.where('Receptionpatient.LastName = :LastName', { LastName });
+        queryBuilder.where('LOWER(Receptionpatients.FirstName || Receptionpatients.LastName) LIKE LOWER(:FullName)', { FullName: `%${LastName}%` });
     }
 
     return queryBuilder.getMany();
-  }
-
+}
 
 async createReception(ReceptionDetails:createReceptionParams): Promise<void> {
     const newpatientonreception=this.ReceptionRepository.create({

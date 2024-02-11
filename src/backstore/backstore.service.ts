@@ -13,21 +13,20 @@ export class BackstoreService {
     return this.BackstoreRepository.find();
   }
 
+
   async findbackstoreDrugByName(DrugName?: string, DrugType?: string): Promise<Backstore[]> {
-    const queryBuilder = this.BackstoreRepository.createQueryBuilder('backstoredrug');
+    const queryBuilder = this.BackstoreRepository.createQueryBuilder('backstoreDrugs');
 
     if (DrugName && DrugType) {
-      queryBuilder.where('backstoredrug.DrugName = DrugName AND backstoredrug.DrugType = :DrugType', { DrugName, DrugType });
+        queryBuilder.where('LOWER(backstoreDrugs.DrugName || backstoreDrugs.DrugType) LIKE LOWER(:FullName)', { FullName: `%${DrugName}${DrugType}%` });
     } else if (DrugName) {
-      queryBuilder.where('backstoredrug.DrugName = :DrugName', { DrugName });
+        queryBuilder.where('LOWER(backstoreDrugs.DrugName || backstoreDrugs.DrugName) LIKE LOWER(:FullName)', { FullName: `%${DrugName}%` });
     } else if (DrugType) {
-      queryBuilder.where('backstoredrug.DrugType = :DrugType', { DrugType});
+        queryBuilder.where('LOWER(backstoreDrugs.DrugType || backstoreDrugs.DrugType) LIKE LOWER(:FullName)', { FullName: `%${DrugType}%` });
     }
 
     return queryBuilder.getMany();
-  }
-
-
+}
 
   async createBackStoreDrug(BackstoreDetails: CreateBackstoreParams): Promise<void> {
     const newbackstoredrug = this.BackstoreRepository.create({

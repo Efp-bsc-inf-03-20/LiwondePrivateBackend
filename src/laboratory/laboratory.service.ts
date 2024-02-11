@@ -13,19 +13,21 @@ export class LaboratoryService {
         return this.LaboraotyRepository.find();
     }
 
+   
     async findLaborotorypatientByName(FirstName?: string, LastName?: string): Promise<Laboratory[]> {
-      const queryBuilder = this.LaboraotyRepository.createQueryBuilder('Laborotorypatient');
+      const queryBuilder = this.LaboraotyRepository.createQueryBuilder('Laborotorypatients');
   
       if (FirstName && LastName) {
-        queryBuilder.where('Laborotorypatient.FirstName = :FirstName AND Laborotorypatient.LastName = :LastName', { FirstName, LastName });
+          queryBuilder.where('LOWER(Laborotorypatients.FirstName || Laborotorypatients.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}${LastName}%` });
       } else if (FirstName) {
-        queryBuilder.where('Laborotorypatient.FirstName = :FirstName', { FirstName });
+          queryBuilder.where('LOWER(Laborotorypatients.FirstName || Laborotorypatients.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}%` });
       } else if (LastName) {
-        queryBuilder.where('Laborotorypatient.LastName = :LastName', { LastName });
+          queryBuilder.where('LOWER(Laborotorypatients.FirstName || Laborotorypatients.LastName) LIKE LOWER(:FullName)', { FullName: `%${LastName}%` });
       }
   
       return queryBuilder.getMany();
-    }
+  }
+  
   
   async  createLaborotoryPatient(LaborotaryDetails:CreateLaborotoryParams): Promise<void> {
     const newpatientonLaborotory=this.LaboraotyRepository.create({

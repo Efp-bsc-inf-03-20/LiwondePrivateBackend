@@ -28,7 +28,7 @@ export class PhamarcyController {
       return 'DrugName is not provided';
     }
   
-    const results = await this.PhamarcyServices.findbackstoreDrugByName(DrugName);
+    const results = await this.PhamarcyServices.findphamarcyDrugByName(DrugName);
   
     if (results.length === 0) {
       return 'DrugName not found';

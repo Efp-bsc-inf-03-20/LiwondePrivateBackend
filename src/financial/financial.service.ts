@@ -17,16 +17,16 @@ export class FinancialService {
         const queryBuilder = this.FinancialRepository.createQueryBuilder('financialpatient');
     
         if (FirstName && LastName) {
-          queryBuilder.where('financialpatient.FirstName = :FirstName AND financialpatient.LastName = :LastName', { FirstName, LastName });
+            queryBuilder.where('LOWER(financialpatient.FirstName || financialpatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}${LastName}%` });
         } else if (FirstName) {
-          queryBuilder.where('financialpatient.FirstName = :FirstName', { FirstName });
+            queryBuilder.where('LOWER(financialpatient.FirstName || financialpatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}%` });
         } else if (LastName) {
-          queryBuilder.where('financialpatient.LastName = :LastName', { LastName });
+            queryBuilder.where('LOWER(financialpatient.FirstName || financialpatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${LastName}%` });
         }
     
         return queryBuilder.getMany();
-      }
-    
+    }
+
   
   
   async  createFinancialPatient(FinancialDetails:createFinanceParams): Promise<void> {

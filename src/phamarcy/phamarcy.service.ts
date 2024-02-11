@@ -15,19 +15,20 @@ export class PhamarcyServices{
   }
 
    
-  async findbackstoreDrugByName(DrugName?: string, DrugType?: string): Promise<Pharmacy[]> {
-    const queryBuilder = this.PhamarcyRepository.createQueryBuilder('phamarcydrug');
+  
+  async findphamarcyDrugByName(DrugName?: string, DrugType?: string): Promise<Pharmacy[]> {
+    const queryBuilder = this.PhamarcyRepository.createQueryBuilder('phamarcyDrugs');
 
     if (DrugName && DrugType) {
-      queryBuilder.where('phamarcydrug.DrugName = DrugName AND phamarcydrug.DrugType = :DrugType', { DrugName, DrugType });
+        queryBuilder.where('LOWER(phamarcyDrugs.DrugName || phamarcyDrugs.DrugType) LIKE LOWER(:FullName)', { FullName: `%${DrugName}${DrugType}%` });
     } else if (DrugName) {
-      queryBuilder.where('phamarcydrug.DrugName = :DrugName', { DrugName });
+        queryBuilder.where('LOWER(phamarcyDrugs.DrugName || phamarcyDrugs.DrugName) LIKE LOWER(:FullName)', { FullName: `%${DrugName}%` });
     } else if (DrugType) {
-      queryBuilder.where('phamarcydrug.DrugType = :DrugType', { DrugType});
+        queryBuilder.where('LOWER(phamarcyDrugs.DrugType || phamarcyDrugs.DrugType) LIKE LOWER(:FullName)', { FullName: `%${DrugType}%` });
     }
 
     return queryBuilder.getMany();
-  }
+}
 
 
   async createPhamarcyDrug(PhamarcyDetails: CreatePhamarcyParams): Promise<void> {
