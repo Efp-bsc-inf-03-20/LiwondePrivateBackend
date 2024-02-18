@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Xray } from 'src/Entitys/Xray.Entity';
 import { XRayService } from './x-ray.service';
 import { UpdatedXrayDto } from './DTOs/UpdateXrayDto';
 import { CreateXrayDtos } from './DTOs/CreateXrayDto';
+import { CreateXrayParams } from './Utils/types';
 
 @Controller('x-ray')
 @ApiTags('Xray')
@@ -12,13 +13,21 @@ export class XRayController {
     constructor(private XrayServices: XRayService) {};
 
     @Post()
+    @ApiOperation({summary:'create xray patient'})
 
-    @ApiOperation({summary:'xray patient created '})
-    @ApiResponse({ status: 200, description: 'xray patient created successfullly ' })
-    createXrayPatient(@Body() CreatexrayDto:CreateXrayDtos): string {
-        this.XrayServices.createXrayPatient(CreatexrayDto)
-        return 'xray patient registered sucessfully';
-      }
+    @ApiResponse({ status: 200, description: 'xray patient created Successfully ' })
+    async createXrayPatient(@Body() CreateXrayDtos: CreateXrayDtos): Promise<void> {
+        try {
+            await this.XrayServices.createXrayPatient(CreateXrayDtos);
+        } catch (error) {
+            if (error.message === 'Either Amount or MedicalScheme should be entered, but not both.') {
+                throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+            } else {
+                throw new HttpException('An error occurred while creating the x-ray patient', HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
 
     @Get()
     @ApiOperation({summary:'return all xray patients'})

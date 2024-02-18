@@ -1,9 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PhamarcySales } from 'src/Entitys/PhamarcySales.Entity';
 import { Repository } from 'typeorm';
 import { CreatePhamarcysalesParams, UpdatedPhamarcySalesParams } from './DTOs/utils/types';
-import { Vitals } from 'src/Entitys/Vitals.Entity';
 
 @Injectable()
 export class PharmacySalesService {
@@ -25,18 +24,20 @@ export class PharmacySalesService {
   
       return queryBuilder.getMany();
   }
-
-
-  
-
-    async createPatientInPhamarcySales(phamarcysalesDetails: CreatePhamarcysalesParams): Promise<void> {
-        const newPatientOnVitals = this.phamarcysalesRepository.create({
-            ...phamarcysalesDetails,
-            Date: new Date(),
-        });
-
-        await this.phamarcysalesRepository.save(newPatientOnVitals);
+  async createPatientInPhamarcySales(phamarcysalesDetails: CreatePhamarcysalesParams): Promise<void> {
+    if ((phamarcysalesDetails.Amount !== null && phamarcysalesDetails.MedicalScheme !== null) ||
+        (phamarcysalesDetails.Amount === null && phamarcysalesDetails.MedicalScheme === null)) {
+        throw new HttpException("Either Amount or MedicalScheme should be entered, but not both.", HttpStatus.BAD_REQUEST);
     }
+
+    const newPatientOnVitals = this.phamarcysalesRepository.create({
+        ...phamarcysalesDetails,
+        Date: new Date(),
+    });
+
+    await this.phamarcysalesRepository.save(newPatientOnVitals);
+}
+
 
     async countPatients(): Promise<number> {
         return this.phamarcysalesRepository.count();

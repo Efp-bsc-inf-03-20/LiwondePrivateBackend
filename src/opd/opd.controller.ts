@@ -12,23 +12,16 @@ export class OpdController {
     @Post()
     @ApiOperation({summary:'OPD patient created succesfully'})
     @ApiResponse({ status: 200, description: 'opd patient  created Successful ' })
-
-    CreateOPDPatient(@Body() CreateOpdDto:CreateOpdDto): string {
+    async CreateOPDPatient(@Body() opdDto: CreateOpdDto): Promise<void> {
       try {
-        this.OpdServices.CreateOPDPatient(CreateOpdDto);
-        return 'opd patient created successfully';
-        
-    } catch (error) {
-        // Check for the specific error related to both "Amount" and "MedicalScheme"
-        if (error.message === 'Amount and MedicalScheme cannot be entered at once.') {
-            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-        } else {
-            // Handle other errors or send a generic error message
-            throw new HttpException('An error occurred while creating the dental patient', HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
+          await this.OpdServices.CreateOPDPatient(opdDto);
+      } catch (error) {
+          if (error.message === 'Either Amount or MedicalScheme should be entered, but not both.') {
+              throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+          } else {
+              throw new HttpException('An error occurred while creating the OPD patient', HttpStatus.INTERNAL_SERVER_ERROR);
+          }
+      }
   }
 
     @Get()

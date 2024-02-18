@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OPD } from 'src/Entitys/OPD.Entity';
 import { Repository } from 'typeorm';
@@ -25,12 +25,11 @@ export class OpdService {
     
         return queryBuilder.getMany();
     }
-  
-  
-    async CreateOPDPatient(OpdDetails: createOpdParams): Promise<void> {  
-        //if (OpdDetails.Amount !== null && OpdDetails.MedicalScheme !== null) {
-         //   throw new Error("Amount and MedicalScheme cannot be entered at once.");
-        //}
+    async CreateOPDPatient(OpdDetails: createOpdParams): Promise<void> {
+        if ((OpdDetails.Amount !== null && OpdDetails.MedicalScheme !== null) ||
+            (OpdDetails.Amount === null && OpdDetails.MedicalScheme === null)) {
+            throw new HttpException("Either Amount or MedicalScheme should be entered, but not both.", HttpStatus.BAD_REQUEST);
+        }
 
         const newOPDPatient = this.OPDRepository.create({
             FirstName: OpdDetails.FirstName,
@@ -44,6 +43,7 @@ export class OpdService {
         await this.OPDRepository.save(newOPDPatient);
     }
 
+ 
     async CountOpdPatient(): Promise<number>{
         const count = await this.OPDRepository.count();
         return count;

@@ -11,16 +11,15 @@ export class DentalController {
     constructor(private DentalServices: DentalService) {};
     
     @Post()
-
     @ApiOperation({summary:'Dental patient created '})
     @ApiResponse({ status: 200, description: 'Dental patient created successfullly ' })
-    createDentalPatient(@Body() DentalDTO: CreateDentalDTO): string {
+    async createDentalPatient(@Body() dentalDTO: CreateDentalDTO): Promise<string> {
         try {
-            this.DentalServices.createDentalPatient(DentalDTO);
+            await this.DentalServices.createDentalPatient(dentalDTO);
             return 'Dental patient created successfully';
         } catch (error) {
             // Check for the specific error related to both "Amount" and "MedicalScheme"
-            if (error.message === 'Amount and MedicalScheme cannot be entered at once.') {
+            if (error.message === 'Either Amount or MedicalScheme should be entered, but not both.') {
                 throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
             } else {
                 // Handle other errors or send a generic error message
@@ -28,6 +27,7 @@ export class DentalController {
             }
         }
     }
+
 
     @Get()
     @ApiOperation({summary:'return all Dental patients'})

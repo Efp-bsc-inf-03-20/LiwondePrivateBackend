@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Xray } from 'src/Entitys/Xray.Entity';
 import { Repository, ILike } from 'typeorm';
@@ -9,16 +9,23 @@ export class XRayService {
     constructor(@InjectRepository(Xray) private XrayRepository: Repository<Xray>) {}
 
     async createXrayPatient(XrayDetails: CreateXrayParams): Promise<Xray> {
-        const newpatientonxray = this.XrayRepository.create({
+        if ((XrayDetails.Amount !== null && XrayDetails.MedicalScheme !== null) ||
+            (XrayDetails.Amount === null && XrayDetails.MedicalScheme === null)) {
+            throw new HttpException("Either Amount or MedicalScheme should be entered, but not both.", HttpStatus.BAD_REQUEST);
+        }
+
+        const newPatientOnXray = this.XrayRepository.create({
             FirstName: XrayDetails.FirstName,
             LastName: XrayDetails.LastName,
             Treatment: XrayDetails.Treatment,
-            Amount: XrayDetails.Amount.toString(),
-            Date: new Date()
+            Amount: XrayDetails.Amount ? XrayDetails.Amount.toString() : null,
+            MedicalScheme: XrayDetails.MedicalScheme,
+            Date: new Date(),
         });
 
-        return this.XrayRepository.save(newpatientonxray);
+        return this.XrayRepository.save(newPatientOnXray);
     }
+
 
     async findAllXrayPatients(): Promise<Xray[]> {
         return this.XrayRepository.find();

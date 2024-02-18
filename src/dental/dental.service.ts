@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Dental } from 'src/Entitys/Dental.Entity';
 import { Repository } from 'typeorm';
@@ -26,23 +26,21 @@ export class DentalService {
         return queryBuilder.getMany();
     }
 
-   
-  async createDentalPatient(DentalDetails: createDentalParams): Promise<void> {
-    //if (DentalDetails.Amount !== null && DentalDetails.MedicalScheme !== null) {
-        //giving problems here
-        //throw new Error("Amount and MedicalScheme cannot be entered at once.");
-    //}
-
-    const newpatientonDental = this.DentalRepository.create({
-        ...DentalDetails,
-        Amount: typeof DentalDetails.Amount === 'string' && DentalDetails.Amount !== '' ? +DentalDetails.Amount : null,
-        MedicalScheme: DentalDetails.MedicalScheme !== null && typeof DentalDetails.MedicalScheme === 'string' && DentalDetails.MedicalScheme !== '' ? DentalDetails.MedicalScheme : null,
-        Date: new Date(),
-    });
-
-    await this.DentalRepository.save(newpatientonDental);
-}
-
+    async createDentalPatient(DentalDetails: createDentalParams): Promise<void> {
+        if ((DentalDetails.Amount !== null && DentalDetails.MedicalScheme !== null) ||
+            (DentalDetails.Amount === null && DentalDetails.MedicalScheme === null)) {
+            throw new HttpException("Either Amount or MedicalScheme should be entered, but not both.", HttpStatus.BAD_REQUEST);
+        }
+    
+        const newpatientonDental = this.DentalRepository.create({
+            ...DentalDetails,
+            Amount: typeof DentalDetails.Amount === 'string' && DentalDetails.Amount !== '' ? +DentalDetails.Amount : null,
+            MedicalScheme: DentalDetails.MedicalScheme !== null && typeof DentalDetails.MedicalScheme === 'string' && DentalDetails.MedicalScheme !== '' ? DentalDetails.MedicalScheme : null,
+            Date: new Date(),
+        });
+    
+        await this.DentalRepository.save(newpatientonDental);
+    }
   
     async countPatients(): Promise<number> {
         const count = await this.DentalRepository.count();
