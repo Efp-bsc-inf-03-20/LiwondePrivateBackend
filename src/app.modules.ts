@@ -32,7 +32,7 @@ import { OpdController } from './opd/opd.controller';
 import { OpdService } from './opd/opd.service';
 import { AuthMiddleware } from './LPH.auth.middleware';
 import { RolesGuard } from './LPH.roles.guard';
-import { StaffService } from './staff/Staff.service';
+import { StaffService } from './staff/staff.service';
 
 @Module({
   imports: [
