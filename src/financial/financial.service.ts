@@ -12,10 +12,19 @@ export class FinancialService {
         return this.FinancialRepository.find();
     }
 
-    async findFinancialatientById(id: number): Promise<Financial | undefined> {
-      const patient= this.FinancialRepository.findOne({ where: { id: id } });
-      return patient;
-  }
+    async findfinancialpatientByName(FirstName?: string, LastName?: string): Promise<Financial[]> {
+        const queryBuilder = this.FinancialRepository.createQueryBuilder('financialpatient');
+    
+        if (FirstName && LastName) {
+            queryBuilder.where('LOWER(financialpatient.FirstName || financialpatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}${LastName}%` });
+        } else if (FirstName) {
+            queryBuilder.where('LOWER(financialpatient.FirstName || financialpatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}%` });
+        } else if (LastName) {
+            queryBuilder.where('LOWER(financialpatient.FirstName || financialpatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${LastName}%` });
+        }
+    
+        return queryBuilder.getMany();
+    }
 
 
 

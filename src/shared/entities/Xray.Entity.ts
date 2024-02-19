@@ -22,9 +22,15 @@ export class Xray{
     Treatment:string
 
     @Column()
-    @IsNotEmpty({message:'Amount must not be empty'})
     @IsNumber({},{message:'amount must be a number'})
     Amount:string
+
+
+    @Column({nullable:true})
+    @IsString({message:'medical scheme must be a string'})
+    
+ 
+    MedicalScheme:string
 
     @Column()
     @IsDate({message:'date must be valid'})

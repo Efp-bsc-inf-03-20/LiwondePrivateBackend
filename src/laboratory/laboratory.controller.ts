@@ -30,13 +30,23 @@ export class LaboratoryController {
 
 
     }
-    @Get(':ID')
+    @Get(':name')
     @ApiOperation({summary:'get an Laboratory patient  '})
     @ApiResponse({ status: 200, description: 'an Laboratory patient returned successfullly ' })
-    async findLaborotoryPatientById(@Param('id') ID: number): Promise<Laboratory| undefined> {
-        return this.LaborotoryServices.findLaborotoryPatientById(ID);
+    async findLaborotorypatientByName(@Param('name') name: string): Promise<Laboratory[] | string> {
+      if (!name) {
+        return 'Name is not provided';
       }
-
+    
+      const results = await this.LaborotoryServices.findLaborotorypatientByName(name);
+    
+      if (results.length === 0) {
+        return 'Name not found';
+      }
+    
+      return results;
+    }
+  
     @Put(':ID')
     @ApiOperation({summary:'update Laboratory patient by id'})
     @ApiResponse({ status: 200, description: 'Laboratory patient updated successfullly ' })
