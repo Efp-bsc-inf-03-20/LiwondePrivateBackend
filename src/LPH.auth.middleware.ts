@@ -4,7 +4,7 @@ import { UnauthorizedException, ForbiddenException, Injectable, NestMiddleware }
 import { LPHStaffRole } from './auth/roles.enum';
 import { verify } from 'jsonwebtoken';
 import { User } from 'src/shared/entities/User.staff.entity';
-import { StaffService } from './staff/Staff.service';
+import { StaffService } from './staff/staff.service';
 
 // Custom interface extending the Request interface to include the 'user' property
 interface CustomRequest extends Request {
