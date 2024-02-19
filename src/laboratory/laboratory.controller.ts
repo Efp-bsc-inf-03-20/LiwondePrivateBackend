@@ -8,51 +8,45 @@ import { Laboratory } from 'src/shared/entities/Laborotary.Entity';
 @Controller('laboratory')
 @ApiTags('Laboratory')
 export class LaboratoryController {
-
-    constructor(private LaborotoryServices: LaboratoryService) {};
-
+  constructor( private laboratoryService: LaboratoryService ) { }
     @Post()
 
     @ApiOperation({summary:'Laboratory patient created '})
     @ApiResponse({ status: 200, description: 'Laboratory patient created successfullly ' })
-    createLaborotoryPatient(@Body() LabDTO:CreateLaborotoryDTO){
-        this.LaborotoryServices.createLaborotoryPatient(LabDTO)
-        return 'Laborotory patient created sucessfully';
-
+    async createLaboratoryPatient( @Body() laboratoryDetails: CreateLaborotoryDTO ): Promise<void> {
+      await this.laboratoryService.createLaborotoryPatient( laboratoryDetails );
     }
 
     @Get()
     @ApiOperation({summary:'return all Laboratory patients'})
     @ApiResponse({ status: 200, description: 'return all Laborotary patient  ' })
-    async findAllLabotoryPatients(){
-        const patients= await this.LaborotoryServices.findAllLabotoryPatients();
-        return patients;
-
-
+    async findAllLaboratoryPatients(): Promise<Laboratory[]> {
+      return this.laboratoryService.findAllLabotoryPatients();
     }
     @Get(':ID')
     @ApiOperation({summary:'get an Laboratory patient  '})
     @ApiResponse({ status: 200, description: 'an Laboratory patient returned successfullly ' })
-    async findLaborotoryPatientById(@Param('id') ID: number): Promise<Laboratory| undefined> {
-        return this.LaborotoryServices.findLaborotoryPatientById(ID);
-      }
-
-    @Put(':ID')
+  async findLaboratoryPatientById( @Param( 'id', ParseIntPipe ) id: number ): Promise<Laboratory | undefined> {
+    return this.laboratoryService.findLaborotoryPatientById( id );
+  }
+/**
+ * Updates a Laboratory patient by their ID.
+ * @param id - The ID of the Laboratory patient to update.
+ * @param updatedLaboratoryDetails - The updated details of the Laboratory patient.
+ */    @Put(':ID')
     @ApiOperation({summary:'update Laboratory patient by id'})
     @ApiResponse({ status: 200, description: 'Laboratory patient updated successfullly ' })
-    async UpdateLaborotoryPatientById(@Param('ID',ParseIntPipe) ID:number,@Body() UpadatedLabDto:UpdatedLaborotoryDTO){
-        await this.LaborotoryServices.UpdateLaborotoryPatientById(ID,UpadatedLabDto)
-
-          return 'lab patient updated sucessfully'
+    async updateLaboratoryPatientById(
+      @Param( 'id', ParseIntPipe ) id: number,
+      @Body() updatedLaboratoryDetails: UpdatedLaborotoryDTO
+    ): Promise<void> {
+      await this.laboratoryService.UpdateLaborotoryPatientById( id, updatedLaboratoryDetails );
       }
 
     @Delete(':ID')
     @ApiOperation({summary:'Delete Laboratory patient  '})
     @ApiResponse({ status: 200, description: 'Laboratory patient deleted successfullly ' })
-
-    DeleteLabPatientByI(@Param('ID',ParseIntPipe)ID:number){
-        this.LaborotoryServices.DeleteLabPatientById(ID);
-          return 'lab patient deleted sucessfully'
+  async deleteLaboratoryPatientById( @Param( 'id', ParseIntPipe ) id: number ): Promise < void> {
+        await this.laboratoryService.DeleteLabPatientById( id );
       }
-
 }

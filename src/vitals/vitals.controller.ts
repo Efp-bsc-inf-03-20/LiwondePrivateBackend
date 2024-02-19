@@ -8,34 +8,28 @@ import { Vitals } from 'src/shared/entities/Vitals.Entity';
 @Controller('vitals')
 @ApiTags('Vitals')
 export class VitalsController {
-  constructor(private vitalsServices: VitalsService){}
-
+    constructor( private vitalsService: VitalsService ) { }
   @Post()
 
   @ApiOperation({summary:'vitals for patient created '})
   @ApiResponse({ status: 200, description: 'vitals for  patient created successfullly ' })
-  createvitalslPatient(@Body() CreatevitalsDto:CreateVitalDtos): string {
-      this.vitalsServices.createvitalslPatient(CreatevitalsDto)
-      return 'vitals for  patient registered sucessfully';
-    }
+  async createVitalsPatient( @Body() vitalsDetails: CreateVitalDtos ): Promise<void> {
+    await this.vitalsService.createvitalslPatient( vitalsDetails );
+  }
 
   @Get()
   @ApiOperation({summary:'return all vitals for patients'})
   @ApiResponse({ status: 200, description: 'return all vitals patient  ' })
-
-  async  findAllvitalspatients() {
-      const patients=await this.vitalsServices.findAllvitalspatients();
-       return patients;
-
-    }
+  async findAllVitalsPatients(): Promise<Vitals[]> {
+    return this.vitalsService.findAllvitalspatients();
+  }
 
   @Get(':ID')
   @ApiOperation({summary:'get a vital for patient  '})
   @ApiResponse({ status: 200, description: 'an xray patient returned successfullly ' })
-
-  async findvitalspatientById(@Param('ID') ID: number): Promise<Vitals| undefined> {
-    return this.vitalsServices.findvitalspatientById(ID)
-    }
+  async findVitalsPatientById( @Param( 'id', ParseIntPipe ) id: number ): Promise<Vitals | undefined> {
+    return this.vitalsService.findvitalspatientById( id );
+  }
 
 
   @Put(':ID')
@@ -44,20 +38,18 @@ export class VitalsController {
   @Put(':ID')
   @ApiOperation({ summary: 'update vitals patient by id' })
   @ApiResponse({ status: 200, description: 'vitals for  patient updated successfully' })
-  async UpdatevitalsPatientById(@Param('ID', ParseIntPipe) ID: number, @Body() UpvitalDto: UpdateVitalsDto) {
-      await this.vitalsServices.UpdatevitalsPatientById(ID,UpvitalDto);
-      return 'vitals for patient updated successfully';
+  async updateVitalsPatientById(
+    @Param( 'id', ParseIntPipe ) id: number,
+    @Body() updatedVitalsDetails: UpdateVitalsDto
+  ): Promise<void> {
+    await this.vitalsService.UpdatevitalsPatientById( id, updatedVitalsDetails );
   }
-
 
   @Delete(':ID')
   @ApiOperation({summary:'Delete vitals for patient  '})
   @ApiResponse({ status: 200, description: 'vitals for  patient deleted successfullly ' })
 
-  DeletevitalsPatientById(@Param('ID',ParseIntPipe)ID:number){
-      this.vitalsServices.DeletevitalsPatientById(ID);
-        return 'vitals for  patient deleted sucessfully'
-    }
-
-
+  async deleteVitalsPatientById( @Param( 'id', ParseIntPipe ) id: number ): Promise<void> {
+    await this.vitalsService.DeletevitalsPatientById( id );
+  }
 }
