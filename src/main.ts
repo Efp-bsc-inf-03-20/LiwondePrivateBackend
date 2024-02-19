@@ -3,16 +3,18 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.modules';
 import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
-
 async function bootstrap() {
   const app = await NestFactory.create( AppModule );
+
   app.use( cookieParser() );
-  app.use(
-    cors( {
-      origin: ['https:localhost:3000'],
-      credentials: true,
-    } ),
-  );
+
+  // Enable CORS
+  app.enableCors( {
+    origin: 'http://localhost:3001', // Update with your frontend URL
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify the allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Specify the allowed headers
+  } );
 
   const options = new DocumentBuilder()
     .setTitle( 'Liwonde Private Hospital' )

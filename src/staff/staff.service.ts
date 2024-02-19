@@ -22,31 +22,38 @@ export class StaffService {
       return res.status( 500 ).send( { message: 'Not all required fields have been filled in.' } );
     }
 
-    const staffMember = await this.staffRepository.findOne( { where: { username } } );
+    try {
+      console.log( 'Finding staff member by username...' );
+      const staffMember = await this.staffRepository.findOne( { where: { username } } );
 
-    // Staff not found or wrong password
-    if ( !staffMember || !( await bcryptjs.compare( password, staffMember.password ) ) ) {
-      return res.status( 500 ).send( { message: 'Invalid Credentials.' } );
-    }
+      // Staff not found or wrong password
+      if ( !staffMember || !( await bcryptjs.compare( password, staffMember.password ) ) ) {
+        return res.status( 500 ).send( { message: 'Invalid Credentials.' } );
+      }
 
-    // Check user's role
-    if ( staffMember.roles.includes( 'admin' ) ) {
-      // User is an admin, grant full access
-      const accessToken = sign( { id: staffMember.id, role: staffMember.roles }, 'access_secret', { expiresIn: 60 * 60 } );
-      const refreshToken = sign( { id: staffMember.id, role: staffMember.roles }, 'refresh_secret', { expiresIn: 24 * 60 * 60 } );
+      // Check user's role
+      if ( staffMember.roles.includes( 'admin' ) ) {
+        // User is an admin, grant full access
+        console.log( 'Generating access token...' );
+        const accessToken = sign( { id: staffMember.id, role: staffMember.roles }, 'access_secret', { expiresIn: 60 * 60 } );
+        const refreshToken = sign( { id: staffMember.id, role: staffMember.roles }, 'refresh_secret', { expiresIn: 24 * 60 * 60 } );
+        // Save session by setting access token in cookies
+        res.cookie( 'accessToken', accessToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 } ); // 1 day
+        res.cookie( 'refreshToken', refreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 } ); // 7 days
+        res.status( 200 ).send( { user: staffMember } );
+      } else if ( staffMember.roles.includes( 'doctor' ) ) {
+        // User is a doctor, grant limited access
+        const accessToken = sign( { id: staffMember.id, role: staffMember.roles }, 'access_secret', { expiresIn: 60 * 60 } );
 
-      res.cookie( 'accessToken', accessToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 } ); // 1 day
-      res.cookie( 'refreshToken', refreshToken, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 } ); // 7 days
-      res.status( 200 ).send( { message: 'login success(full access)' } );
-    } else if ( staffMember.roles.includes( 'doctor' ) ) {
-      // User is a doctor, grant limited access
-      const accessToken = sign( { id: staffMember.id, role: staffMember.roles }, 'access_secret', { expiresIn: 60 * 60 } );
-
-      res.cookie( 'accessToken', accessToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 } ); // 1 day
-      res.status( 200 ).send( { message: 'login success (limited access)' } );
-    } else {
-      // User has an unrecognized role, deny access
-      return res.status( 403 ).send( { message: 'Forbidden' } );
+        res.cookie( 'accessToken', accessToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 } ); // 1 day
+        res.status( 200 ).send( { user: staffMember } );
+      } else {
+        // User has an unrecognized role, deny access
+        return res.status( 403 ).send( { message: 'Forbidden' } );
+      }
+    } catch ( error ) {
+      console.error( 'Error during login:', error );
+      return res.status( 500 ).send( { message: 'Login failed. Please try again.' } );
     }
   }
 

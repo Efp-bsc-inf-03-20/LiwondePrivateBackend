@@ -3,9 +3,6 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { StaffService } from './Staff.service';
 import { Request, Response } from 'express';
 import { User } from '../shared/entities/User.staff.entity';
-import { Roles } from '../roles.decorator';
-import { LPHStaffRole } from 'src/auth/roles.enum';
-import { AuthMiddleware } from 'src/LPH.auth.middleware';
 import { RolesGuard } from 'src/LPH.roles.guard';
 import { CreateStaffDTO } from './DTOs/CreateStaffDtos';
 import { UpdateStaffDTO } from './DTOs/UpdateStaffDtos';
@@ -38,7 +35,13 @@ export class StaffController {
   async refreshStaff( @Req() req: Request, @Res() res: Response ) {
     return this.staffService.refreshStaff( req, res );
   }
-
+  // @Post( '/forgotStaffPassword' )
+  // @ApiOperation( { summary: 'forgotStaffPasswordf' } )
+  // @ApiResponse( { status: 200, description: 'forgotStaffPassword' } )
+  // // @Roles( LPHStaffRole.ADMIN ) // Only admin can update staff
+  // async forgotStaffPassword( @Param( 'Username' ) username: Username, @Param( 'email' ) email: Email ) {
+  //   // return this.staffService.forgotStaffPassword( username,email);
+  // }
   @Get( '/logout' )
   @ApiOperation( { summary: 'Staff Logout' } )
   @ApiResponse( { status: 200, description: 'Staff logout successfully' } )
@@ -74,6 +77,8 @@ export class StaffController {
   async updateStaffById( @Param( 'id' ) id: number, @Body() updateStaffDTO: UpdateStaffDTO ) {
     return this.staffService.updateStaffById( +id, updateStaffDTO );
   }
+
+
 
   @Delete( '/delete-staff/:id' )
   @ApiOperation( { summary: 'Delete remove Staff' } )
