@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { UnauthorizedException, ForbiddenException, Injectable, NestMiddleware } from '@nestjs/common';
-import { StaffService } from 'src/staff/Staff.service';
+
 import { LPHStaffRole } from './auth/roles.enum';
 import { verify } from 'jsonwebtoken';
 import { User } from 'src/shared/entities/User.staff.entity';
+import { StaffService } from './staff/Staff.service';
 
 // Custom interface extending the Request interface to include the 'user' property
 interface CustomRequest extends Request {

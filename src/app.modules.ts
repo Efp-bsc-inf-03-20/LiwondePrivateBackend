@@ -27,12 +27,12 @@ import { PhamarcySales } from './shared/entities/PhamarcySales.Entity';
 import { Vitals } from './shared/entities/Vitals.Entity';
 import { Xray } from './shared/entities/Xray.Entity';
 import { User } from './shared/entities/User.staff.entity';
-import { StaffService } from './staff/Staff.service';
 import { StaffController } from './staff/staff.controller';
 import { OpdController } from './opd/opd.controller';
 import { OpdService } from './opd/opd.service';
 import { AuthMiddleware } from './LPH.auth.middleware';
 import { RolesGuard } from './LPH.roles.guard';
+import { StaffService } from './staff/Staff.service';
 
 @Module({
   imports: [
