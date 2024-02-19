@@ -3,6 +3,7 @@ export type CreateXrayParams={
     LastName:string;
     Treatment:string;
     Amount:number;
+    MedicalScheme:string;
 
 }
 export type UpdateXrayParams={
@@ -10,5 +11,6 @@ export type UpdateXrayParams={
     LastName:string;
     Treatment:string;
     Amount:number;
+    MedicalScheme:string
 
 }

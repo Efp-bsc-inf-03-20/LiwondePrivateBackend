@@ -3,5 +3,6 @@ export class UpdatedXrayDto{
     LastName:string;
     Treatment:string;
     Amount:number;
+    MedicalScheme:string
 
 }

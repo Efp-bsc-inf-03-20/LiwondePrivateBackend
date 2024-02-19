@@ -14,10 +14,21 @@ export class PhamarcyServices{
       return this.PhamarcyRepository.find();
   }
 
-    async findPhamarcyDrugById(ID: number): Promise<Pharmacy| undefined> {
-      const drug= this.PhamarcyRepository.findOne({ where: { DrugID: ID } });
-      return drug;
-  }
+   
+  
+  async findphamarcyDrugByName(DrugName?: string, DrugType?: string): Promise<Pharmacy[]> {
+    const queryBuilder = this.PhamarcyRepository.createQueryBuilder('phamarcyDrugs');
+
+    if (DrugName && DrugType) {
+        queryBuilder.where('LOWER(phamarcyDrugs.DrugName || phamarcyDrugs.DrugType) LIKE LOWER(:FullName)', { FullName: `%${DrugName}${DrugType}%` });
+    } else if (DrugName) {
+        queryBuilder.where('LOWER(phamarcyDrugs.DrugName || phamarcyDrugs.DrugName) LIKE LOWER(:FullName)', { FullName: `%${DrugName}%` });
+    } else if (DrugType) {
+        queryBuilder.where('LOWER(phamarcyDrugs.DrugType || phamarcyDrugs.DrugType) LIKE LOWER(:FullName)', { FullName: `%${DrugType}%` });
+    }
+
+    return queryBuilder.getMany();
+}
 
 
   async createPhamarcyDrug(PhamarcyDetails: CreatePhamarcyParams): Promise<void> {
