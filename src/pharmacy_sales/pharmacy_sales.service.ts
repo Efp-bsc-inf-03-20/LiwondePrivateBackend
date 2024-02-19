@@ -24,14 +24,19 @@ export class PharmacySalesService {
   
       return queryBuilder.getMany();
   }
-  async createPatientInPhamarcySales(phamarcysalesDetails: CreatePhamarcysalesParams): Promise<void> {
-    if ((phamarcysalesDetails.Amount !== null && phamarcysalesDetails.MedicalScheme !== null) ||
-        (phamarcysalesDetails.Amount === null && phamarcysalesDetails.MedicalScheme === null)) {
+  async createPatientInPharmacySales(pharmacySalesDetails: CreatePhamarcysalesParams): Promise<void> {
+    if (pharmacySalesDetails.Amount !== null && pharmacySalesDetails.MedicalScheme !== null) {
         throw new HttpException("Either Amount or MedicalScheme should be entered, but not both.", HttpStatus.BAD_REQUEST);
     }
 
+
+
+
+
+
+
     const newPatientOnVitals = this.phamarcysalesRepository.create({
-        ...phamarcysalesDetails,
+        ...pharmacySalesDetails,
         Date: new Date(),
     });
 

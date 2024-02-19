@@ -5,7 +5,7 @@ import { PhamarcySales } from 'src/Entitys/PhamarcySales.Entity';
 
 import { UpdatedPhamarcySalesDTO } from './DTOs/UpdatePhamarcySales.dto';
 import { CreatePhamarcysalesDTO } from './DTOs/CreatePhamarcySales.dto';
-import { getPhamarcysalesDTO } from './DTOs/GetphamarcySales.dto';
+
 import { CreatePhamarcysalesParams } from './DTOs/utils/types';
 
 @ApiTags('phamarcy sales')
@@ -15,17 +15,21 @@ export class PharmacySalesController {
 
 
     @Post()
-    async createPatientInPhamarcySales(@Body() phamarcysalesDetails: CreatePhamarcysalesParams): Promise<void> {
-        try {
-            await this.PhamarcysalesServices.createPatientInPhamarcySales(phamarcysalesDetails);
-        } catch (error) {
-            if (error.message === 'Either Amount or MedicalScheme should be entered, but not both.') {
-                throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-            } else {
-                throw new HttpException('An error occurred while creating the patient in pharmacy sales', HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+@ApiOperation({summary:'create phamarcysale patient'})
+@ApiResponse({ status: 200, description: 'phamarcysale patient created Successful ' })
+async createPatientInPharmacySales(@Body() pharmacySalesDtos: CreatePhamarcysalesDTO): Promise<string> {
+    try {
+        await this.PhamarcysalesServices.createPatientInPharmacySales(pharmacySalesDtos);
+        return 'pharmacy sale patient created successfully';
+    } catch (error) {
+        if (error.message === 'Either Amount or MedicalScheme should be entered, but not both.') {
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+        } else if (error.message === 'Both Amount and MedicalScheme cannot be blank.') {
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+        } else {
+            throw new HttpException('An error occurred while creating the pharmacy sale patient', HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    
+    }
 
 
    
