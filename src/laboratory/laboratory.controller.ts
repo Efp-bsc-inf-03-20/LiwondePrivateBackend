@@ -40,7 +40,6 @@ export class LaboratoryController {
     @Put(':ID')
     @ApiOperation({summary:'update Laboratory patient by id'})
     @ApiResponse({ status: 200, description: 'Laboratory patient updated successfullly ' })
-
     async UpdateLaborotoryPatientById(@Param('ID',ParseIntPipe) ID:number,@Body() UpadatedLabDto:UpdatedLaborotoryDTO){
         await this.LaborotoryServices.UpdateLaborotoryPatientById(ID,UpadatedLabDto)
 
