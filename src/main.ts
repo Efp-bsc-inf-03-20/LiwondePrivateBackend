@@ -10,7 +10,7 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors( {
-    origin: 'http://localhost:3001', // Update with your frontend URL
+    origin: 'http://hospital-mggb.onrender.com', // Update with your frontend URL
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify the allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Specify the allowed headers
