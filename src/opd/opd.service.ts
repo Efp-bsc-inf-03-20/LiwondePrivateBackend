@@ -7,12 +7,9 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class OpdService {
     constructor(@InjectRepository(OPD) private OPDRepository: Repository<OPD>) { }
-
     findAllOPDPatient(): Promise<OPD[]> {
         return this.OPDRepository.find();
-
     }
-
     async CreateOPDPatient(/* dtos here */): Promise<void> {
         const newOPDPatient = this.OPDRepository.create({
             //dtos

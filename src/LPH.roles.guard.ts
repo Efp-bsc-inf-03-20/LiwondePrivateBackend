@@ -21,7 +21,7 @@ export class RolesGuard implements CanActivate {
 
     if ( !requiredRoles || requiredRoles.length === 0 ) {
       console.log( 'RolesGuard: No roles specified, denying access.' );
-      return true; // Allow access if no roles are specified
+      return true;
     }
 
     console.log( 'RolesGuard: Retrieving authenticated user' );
@@ -37,7 +37,7 @@ export class RolesGuard implements CanActivate {
     try {
       if ( user.roles.includes( LPHStaffRole.ADMIN ) ) {
         console.log( 'RolesGuard: User is an admin, granting full access.' );
-        return true; // Admin has full access
+        return true;
       } else if ( user.roles.includes( LPHStaffRole.MANAGER ) ) {
         console.log( 'RolesGuard: User is manager, checking CRUD permissions on LPH staff.' );
         return this.hasAllRequiredRoles( requiredRoles, LPHStaffRole.MANAGER );
@@ -57,8 +57,6 @@ export class RolesGuard implements CanActivate {
       throw error; // Re-throw the error for appropriate handling
     }
   }
-
-
 
   private getUser( context: ExecutionContext ) {
     return context.switchToHttp().getRequest().user;

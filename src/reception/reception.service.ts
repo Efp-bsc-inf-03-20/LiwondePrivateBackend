@@ -12,7 +12,7 @@ export class ReceptionService{
       return this.ReceptionRepository.find();
   }
 
- 
+
   async findReceptionpatientByName(FirstName?: string, LastName?: string): Promise<Reception[]> {
     const queryBuilder = this.ReceptionRepository.createQueryBuilder('Receptionpatients');
 

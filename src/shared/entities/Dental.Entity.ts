@@ -40,6 +40,4 @@ export class Dental{
 
     @Column()
     Date:Date
-
-
 }

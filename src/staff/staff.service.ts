@@ -16,21 +16,17 @@ export class StaffService {
   }
   async loginStaff( user: User, res: Response ) {
     const { username, password } = user;
-
     // Check for required fields
     if ( !username?.trim() || !password?.trim() ) {
       return res.status( 500 ).send( { message: 'Not all required fields have been filled in.' } );
     }
-
     try {
       console.log( 'Finding staff member by username...' );
       const staffMember = await this.staffRepository.findOne( { where: { username } } );
-
       // Staff not found or wrong password
       if ( !staffMember || !( await bcryptjs.compare( password, staffMember.password ) ) ) {
         return res.status( 500 ).send( { message: 'Invalid Credentials.' } );
       }
-
       // Check user's role
       if ( staffMember.roles.includes( 'admin' ) ) {
         // User is an admin, grant full access

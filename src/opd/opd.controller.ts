@@ -1,8 +1,9 @@
 import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
 import { OpdService } from './opd.service';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller( 'opd' )
+@ApiTags('OPD')
 export class OpdController {
   constructor( private OpdServices: OpdService ) { }
   @Post()

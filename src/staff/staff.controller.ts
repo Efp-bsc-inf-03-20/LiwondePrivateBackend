@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { StaffService } from './staff.service';
 import { Request, Response } from 'express';
 import { User } from '../shared/entities/User.staff.entity';
@@ -7,7 +7,8 @@ import { RolesGuard } from 'src/LPH.roles.guard';
 import { CreateStaffDTO } from './DTOs/CreateStaffDtos';
 import { UpdateStaffDTO } from './DTOs/UpdateStaffDtos';
 
-@Controller( 'LPHStaff' )
+@Controller( 'Staff' )
+@ApiTags( 'Staff' )
 @UseGuards( RolesGuard )
 export class StaffController {
   constructor( private readonly staffService: StaffService ) { }

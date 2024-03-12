@@ -34,25 +34,23 @@ import { AuthMiddleware } from './LPH.auth.middleware';
 import { RolesGuard } from './LPH.roles.guard';
 import { StaffService } from './staff/staff.service';
 
-@Module({
+@Module( {
   imports: [
-    TypeOrmModule.forRoot({
+    TypeOrmModule.forRoot( {
       type: 'postgres',
       host: 'localhost',
       port: 5432,
-      username:'postgres',
-      database:'liwondeprivatehospital',
-      password:'1234',
-      url:"postgres://jhxtzhpp:Ax7lDlN81kXio7XGO4Zi_S_QC8Tj3W7d@baasu.db.elephantsql.com/jhxtzhpp",
-      // username: 'postgres',
-      // password: 'wtg3g5m95',
-      // database: 'liwondeprivatehospital',
-      entities: [User, Reception, OPD, Pharmacy, Financial, DaySummary,Backstore,Xray,Laboratory,PhamarcySales,Dental,Vitals],
+      username: 'postgres',
+      // password:'1234',
+      // url:"postgres://jhxtzhpp:Ax7lDlN81kXio7XGO4Zi_S_QC8Tj3W7d@baasu.db.elephantsql.com/jhxtzhpp",
+      password: 'wtg3g5m95',
+      database: 'liwondeprivatehospital',
+      entities: [User, Reception, OPD, Pharmacy, Financial, DaySummary, Backstore, Xray, Laboratory, PhamarcySales, Dental, Vitals],
       synchronize: true,
-    }),
-    TypeOrmModule.forFeature( [User, Backstore,Pharmacy,Reception,OPD,Financial,DaySummary,Xray,Laboratory,PhamarcySales,Dental,Vitals]),
+    } ),
+    TypeOrmModule.forFeature( [User, Backstore, Pharmacy, Reception, OPD, Financial, DaySummary, Xray, Laboratory, PhamarcySales, Dental, Vitals] ),
   ],
-  providers: [AuthMiddleware,StaffService,
+  providers: [AuthMiddleware, StaffService,
     BackstoreService,
     AppService,
     PhamarcyServices,
@@ -65,7 +63,7 @@ import { StaffService } from './staff/staff.service';
     PharmacySalesService, OpdService,
     Backstore,
     Pharmacy,
-    Reception ,
+    Reception,
     OPD,
     Financial,
     DaySummary,
@@ -83,5 +81,5 @@ import { StaffService } from './staff/staff.service';
     VitalsController,
     PharmacySalesController,
   ],
-})
-export class AppModule {}
+} )
+export class AppModule { }

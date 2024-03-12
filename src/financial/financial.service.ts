@@ -7,14 +7,11 @@ import { Financial } from 'src/shared/entities/Financial.Entity';
 @Injectable()
 export class FinancialService {
     constructor(@InjectRepository(Financial) private FinancialRepository: Repository<Financial>){ }
-
     async  findAllFinancialatients(): Promise<Financial[]>{
         return this.FinancialRepository.find();
     }
-
     async findfinancialpatientByName(FirstName?: string, LastName?: string): Promise<Financial[]> {
         const queryBuilder = this.FinancialRepository.createQueryBuilder('financialpatient');
-    
         if (FirstName && LastName) {
             queryBuilder.where('LOWER(financialpatient.FirstName || financialpatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${FirstName}${LastName}%` });
         } else if (FirstName) {
@@ -22,11 +19,8 @@ export class FinancialService {
         } else if (LastName) {
             queryBuilder.where('LOWER(financialpatient.FirstName || financialpatient.LastName) LIKE LOWER(:FullName)', { FullName: `%${LastName}%` });
         }
-    
         return queryBuilder.getMany();
     }
-
-
 
   async  createFinancialPatient(FinancialDetails:createFinanceParams): Promise<void> {
     const newpatientonreception=this.FinancialRepository.create({
