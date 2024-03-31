@@ -33,6 +33,7 @@ import { OpdService } from './opd/opd.service';
 import { AuthMiddleware } from './LPH.auth.middleware';
 import { RolesGuard } from './LPH.roles.guard';
 import { StaffService } from './staff/staff.service';
+import { FinanceModule } from './financial/finance.module';
 
 @Module( {
   imports: [
@@ -53,7 +54,7 @@ import { StaffService } from './staff/staff.service';
       entities: [User, Reception, OPD, Pharmacy, Financial, DaySummary, Backstore, Xray, Laboratory, PhamarcySales, Dental, Vitals],
       synchronize: true,
     } ),
-    TypeOrmModule.forFeature( [User, Backstore, Pharmacy, Reception, OPD, Financial, DaySummary, Xray, Laboratory, PhamarcySales, Dental, Vitals] ),
+    TypeOrmModule.forFeature( [User, Backstore, Pharmacy, Reception, OPD, Financial, DaySummary, Xray, Laboratory, PhamarcySales, Dental, Vitals, FinanceModule] ),
   ],
   providers: [AuthMiddleware, StaffService,
     BackstoreService,

@@ -1,4 +1,4 @@
-import { DentalPayments } from './../auth/payment.enum';
+import { DentalPayments } from '../auth/payment.enum';
 import { IsNotEmpty, IsString } from "class-validator";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
@@ -37,13 +37,13 @@ export class Dental {
     @Column( { type: 'simple-array', default: [] } )
     dentalPayments: string[];
 
-    @Column({nullable:false})
-    @IsNotEmpty({ message: 'Treatment should not be empty' })
-    @IsString({ message: 'Treatment should be a string' })
-    Treatment:string
+    @Column( { nullable: false } )
+    @IsNotEmpty( { message: 'Treatment should not be empty' } )
+    @IsString( { message: 'Treatment should be a string' } )
+    Treatment: string
 
     @Column()
-    Date:Date
+    Date: Date
 
 
 }
